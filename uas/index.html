@@ -23,48 +23,61 @@
             width: 320px; 
             text-align: center; 
         }
-        h2 { color: #333; margin-bottom: 20px; }
+        /* Memberi warna pada tulisan judul */
+        h2 { color: #28a745; margin-bottom: 20px; font-size: 1.5em; }
 
-        /* Style untuk Input dengan Ikon */
         .input-group {
             position: relative;
             margin-bottom: 15px;
             text-align: left;
         }
-        .input-group i {
+        .input-group i.left-icon {
             position: absolute;
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: #888;
         }
+        /* Ikon mata untuk password */
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            cursor: pointer;
+        }
         .input-group input {
             width: 100%;
-            padding: 12px 12px 12px 40px;
+            padding: 12px 35px 12px 40px;
             border: 1px solid #ddd;
             border-radius: 6px;
             box-sizing: border-box;
             transition: 0.3s;
         }
+        /* Efek fokus normal hijau */
         .input-group input:focus {
             border-color: #28a745;
             outline: none;
             box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
         }
+        /* Class error untuk garis merah */
+        .input-error {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 5px rgba(220, 53, 69, 0.2) !important;
+        }
 
-        /* Container Tombol agar Berdampingan */
         .button-group {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
-
         .btn-login { 
             background-color: #28a745; 
             color: white; 
             border: none; 
             padding: 12px; 
-            flex: 2; /* Tombol login lebih lebar */
+            flex: 2; 
             border-radius: 6px; 
             cursor: pointer; 
             font-weight: bold; 
@@ -73,21 +86,20 @@
         .btn-login:hover { background-color: #218838; }
 
         .btn-cancel { 
-            background-color: #6c757d; 
-            color: white; 
-            border: none; 
+            background-color: #f8f9fa; 
+            color: #333; 
+            border: 1px solid #ddd; 
             padding: 12px; 
             flex: 1; 
             border-radius: 6px; 
             cursor: pointer; 
             transition: 0.3s;
         }
-        .btn-cancel:hover { background-color: #5a6268; }
+        .btn-cancel:hover { background-color: #e2e6ea; }
 
         .hidden { display: none; }
         #info-user { color: #28a745; font-weight: bold; font-size: 1.2em; }
         
-        /* Logout Button Style */
         .btn-logout {
             background-color: #dc3545;
             color: white;
@@ -106,16 +118,18 @@
         <h2>Silahkan Login Terlebih Dahulu!</h2>
         
         <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" id="userInp" placeholder="Masukkan Username">
+            <i class="fas fa-user left-icon"></i>
+            <input type="text" id="userInp" placeholder="Masukkan Username" oninput="aplikasi.removeError()">
         </div>
 
         <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="passInp" placeholder="Masukkan Password">
+            <i class="fas fa-lock left-icon"></i>
+            <input type="password" id="passInp" placeholder="Masukkan Password" oninput="aplikasi.removeError()">
+            <i class="fas fa-eye toggle-password" id="eyeIcon" onclick="aplikasi.toggleShowPassword()"></i>
         </div>
 
         <div class="button-group">
+            <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
             <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
         </div>
     </div>
@@ -134,7 +148,6 @@
             this.key = 'db_user';
             this.init();
         }
-
         init() {
             const dataAwal = [
                 { username: "user", pw: "241111" },
@@ -145,7 +158,6 @@
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
-
         getUsers() {
             return JSON.parse(localStorage.getItem(this.key));
         }
@@ -156,9 +168,24 @@
             this.db = new Database();
         }
 
+        // Fitur lihat password
+        toggleShowPassword() {
+            const passInput = document.getElementById('passInp');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passInput.type = "password";
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
         cekLogin() {
-            const user = document.getElementById('userInp').value;
-            const pass = document.getElementById('passInp').value;
+            const uInput = document.getElementById('userInp');
+            const pInput = document.getElementById('passInp');
+            const user = uInput.value;
+            const pass = pInput.value;
             const dataUser = this.db.getUsers();
 
             const found = dataUser.find(u => u.username === user && u.pw === pass);
@@ -166,8 +193,17 @@
             if (found) {
                 this.pindahHalaman(found.username);
             } else {
+                // Beri warna merah jika salah
+                uInput.classList.add('input-error');
+                pInput.classList.add('input-error');
                 alert("Username atau Password Salah!");
             }
+        }
+
+        // Hapus warna merah saat user mulai mengetik lagi
+        removeError() {
+            document.getElementById('userInp').classList.remove('input-error');
+            document.getElementById('passInp').classList.remove('input-error');
         }
 
         pindahHalaman(nama) {
@@ -179,6 +215,7 @@
         reset() {
             document.getElementById('userInp').value = "";
             document.getElementById('passInp').value = "";
+            this.removeError();
         }
 
         logout() {
