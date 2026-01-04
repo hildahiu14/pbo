@@ -24,15 +24,6 @@
             text-align: center; 
         }
 
-        /* Gaya untuk Ikon Gembok Besar */
-        .lock-icon-container {
-            margin-bottom: 20px;
-            color: #28a745; /* Warna hijau agar sesuai dengan tema login */
-        }
-        .lock-icon-container i {
-            font-size: 3.5em; /* Ukuran ikon gembok */
-        }
-
         /* Header Kotak Merah */
         .header-box {
             background-color: #dc3545;
@@ -150,9 +141,6 @@
 
 <div class="box">
     <div id="form-login">
-        <div class="lock-icon-container">
-            <i class="fas fa-lock-open"></i> </div>
-
         <div class="header-box">
             Silahkan Login Terlebih Dahulu!
         </div>
@@ -235,3 +223,44 @@
             const dataUser = this.db.getUsers();
 
             const found = dataUser.find(u => u.username === user && u.pw === pass);
+
+            if (found) {
+                this.pindahHalaman(found.username);
+            } else {
+                // Tampilkan pesan error di dalam halaman (bukan alert)
+                errorBox.style.display = 'flex';
+                uInput.classList.add('input-error');
+                pInput.classList.add('input-error');
+            }
+        }
+
+        removeError() {
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('userInp').classList.remove('input-error');
+            document.getElementById('passInp').classList.remove('input-error');
+        }
+
+        pindahHalaman(nama) {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('halaman-user').classList.remove('hidden');
+            document.getElementById('info-user').innerText = `Hi, ${nama}`;
+        }
+
+        reset() {
+            this.removeError();
+            document.getElementById('userInp').value = "";
+            document.getElementById('passInp').value = "";
+            document.getElementById('passInp').type = "password";
+            document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
+        }
+
+        logout() {
+            location.reload();
+        }
+    }
+
+    const aplikasi = new LoginApp();
+</script>
+
+</body>
+</html>
