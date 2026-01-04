@@ -24,16 +24,39 @@
             text-align: center; 
         }
 
-        /* Perbaikan Judul: Menjadi kotak merah mirip tombol */
+        /* Gaya untuk Ikon Gembok Besar */
+        .lock-icon-container {
+            margin-bottom: 20px;
+            color: #28a745; /* Warna hijau agar sesuai dengan tema login */
+        }
+        .lock-icon-container i {
+            font-size: 3.5em; /* Ukuran ikon gembok */
+        }
+
+        /* Header Kotak Merah */
         .header-box {
             background-color: #dc3545;
             color: white;
             padding: 12px;
             border-radius: 6px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-size: 1.1em;
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(220, 53, 69, 0.2);
+        }
+
+        /* Tampilan Alert Gagal Login */
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            display: none; /* Sembunyi secara default */
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .input-group {
@@ -49,7 +72,6 @@
             color: #888;
         }
         
-        /* Ikon mata untuk password */
         .toggle-password {
             position: absolute;
             right: 12px;
@@ -57,13 +79,11 @@
             transform: translateY(-50%);
             color: #888;
             cursor: pointer;
-            transition: 0.2s;
         }
-        .toggle-password:hover { color: #333; }
 
         .input-group input {
             width: 100%;
-            padding: 12px 40px 12px 40px; /* Padding kanan ditambah untuk ikon mata */
+            padding: 12px 40px 12px 40px;
             border: 1px solid #ddd;
             border-radius: 6px;
             box-sizing: border-box;
@@ -73,26 +93,27 @@
         .input-group input:focus {
             border-color: #28a745;
             outline: none;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
         }
 
-        /* Garis merah saat salah */
+        /* Garis merah saat input salah */
         .input-error {
             border-color: #dc3545 !important;
-            box-shadow: 0 0 5px rgba(220, 53, 69, 0.2) !important;
+            background-color: #fff8f8;
         }
 
-        .button-group {
+        /* Group tombol vertikal (Cancel di bawah Login) */
+        .button-stack {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 20px;
         }
+
         .btn-login { 
             background-color: #28a745; 
             color: white; 
             border: none; 
             padding: 12px; 
-            flex: 2; 
             border-radius: 6px; 
             cursor: pointer; 
             font-weight: bold; 
@@ -101,16 +122,15 @@
         .btn-login:hover { background-color: #218838; }
 
         .btn-cancel { 
-            background-color: #f8f9fa; 
-            color: #333; 
-            border: 1px solid #ddd; 
-            padding: 12px; 
-            flex: 1; 
+            background-color: transparent; 
+            color: #666; 
+            border: 1px solid #ccc; 
+            padding: 10px; 
             border-radius: 6px; 
             cursor: pointer; 
             transition: 0.3s;
         }
-        .btn-cancel:hover { background-color: #e2e6ea; }
+        .btn-cancel:hover { background-color: #f0f0f0; color: #333; }
 
         .hidden { display: none; }
         #info-user { color: #28a745; font-weight: bold; font-size: 1.2em; }
@@ -130,8 +150,16 @@
 
 <div class="box">
     <div id="form-login">
+        <div class="lock-icon-container">
+            <i class="fas fa-lock-open"></i> </div>
+
         <div class="header-box">
             Silahkan Login Terlebih Dahulu!
+        </div>
+
+        <div id="errorMsg" class="alert-error">
+            <i class="fas fa-circle-xmark"></i>
+            <span>Silakan periksa kembali username dan password Anda</span>
         </div>
         
         <div class="input-group">
@@ -145,14 +173,14 @@
             <i class="fas fa-eye-slash toggle-password" id="eyeIcon" onclick="aplikasi.toggleShowPassword()"></i>
         </div>
 
-        <div class="button-group">
-            <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
+        <div class="button-stack">
             <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
+            <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
         </div>
     </div>
 
     <div id="halaman-user" class="hidden">
-        <i class="fas fa-circle-user" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
+        <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
         <p id="info-user"></p>
         <p>Selamat datang di sistem.</p>
         <button class="btn-logout" onclick="aplikasi.logout()">Logout</button>
@@ -171,8 +199,6 @@
                 { username: "mahasiswa", pw: "241222" },
                 { username: "hilda", pw: "241333" }
             ];
-            // Gunakan clear() jika ingin memastikan data selalu fresh saat testing
-            // localStorage.clear(); 
             if (!localStorage.getItem(this.key)) {
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
@@ -187,18 +213,14 @@
             this.db = new Database();
         }
 
-        // Perbaikan Logika Ikon Mata
         toggleShowPassword() {
             const passInput = document.getElementById('passInp');
             const eyeIcon = document.getElementById('eyeIcon');
-            
             if (passInput.type === "password") {
                 passInput.type = "text";
-                // Mata terbuka saat password terlihat
                 eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
             } else {
                 passInput.type = "password";
-                // Mata tertutup saat password disembunyikan
                 eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
             }
         }
@@ -206,48 +228,10 @@
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
-            const user = uInput.value.trim(); // Gunakan trim untuk hapus spasi tak sengaja
+            const errorBox = document.getElementById('errorMsg');
+            
+            const user = uInput.value.trim();
             const pass = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
             const found = dataUser.find(u => u.username === user && u.pw === pass);
-
-            if (found) {
-                this.pindahHalaman(found.username);
-            } else {
-                uInput.classList.add('input-error');
-                pInput.classList.add('input-error');
-                alert("Username atau Password Salah!");
-            }
-        }
-
-        removeError() {
-            document.getElementById('userInp').classList.remove('input-error');
-            document.getElementById('passInp').classList.remove('input-error');
-        }
-
-        pindahHalaman(nama) {
-            document.getElementById('form-login').classList.add('hidden');
-            document.getElementById('halaman-user').classList.remove('hidden');
-            document.getElementById('info-user').innerText = `Hi, ${nama}`;
-        }
-
-        reset() {
-            document.getElementById('userInp').value = "";
-            document.getElementById('passInp').value = "";
-            // Reset ikon mata ke tertutup
-            document.getElementById('passInp').type = "password";
-            document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
-            this.removeError();
-        }
-
-        logout() {
-            location.reload();
-        }
-    }
-
-    const aplikasi = new LoginApp();
-</script>
-
-</body>
-</html>
