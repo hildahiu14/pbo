@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* Variabel Warna Utama untuk Konsistensi */
+        :root {
+            --biru-ipwija: #003366; /* Warna biru gelap sesuai logo */
+            --merah-ipwija: #dc3545;
+        }
+
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; 
@@ -23,56 +29,40 @@
         }
 
         .logo-top {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: auto;
             margin-bottom: 20px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 0.95em;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 350px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            animation: fadeIn 0.3s ease;
-            z-index: 10;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
 
         .box { 
             background: rgba(255, 255, 255, 0.95);
             padding: 30px; 
             border-radius: 15px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
             width: 320px; 
             text-align: center; 
             backdrop-filter: blur(5px);
         }
 
-        /* Teks Pengganti Ikon Gembok */
+        /* Teks IM241 - Warna Biru Gelap Logo */
         .brand-text {
-            font-size: 2.5em;
-            font-weight: 800;
-            color: #007bff; /* Warna biru sesuai tema tombol */
-            margin-bottom: 15px;
-            letter-spacing: 2px;
+            font-size: 2.8em;
+            font-weight: 900;
+            color: var(--biru-ipwija);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .header-box {
-            background-color: #dc3545;
+            background-color: var(--merah-ipwija);
             color: white;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 25px;
             font-weight: bold;
+            font-size: 0.9em;
         }
 
         .input-group {
@@ -88,46 +78,26 @@
             transform: translateY(-50%);
             color: #888;
         }
-        
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-            cursor: pointer;
-        }
 
         .input-group input {
             width: 100%;
-            padding: 12px 40px 12px 40px;
+            padding: 12px 40px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
             transition: 0.3s;
         }
         
+        /* Highlight Fokus Input - Biru Gelap Logo */
         .input-group input:focus {
-            border-color: #007bff;
+            border-color: var(--biru-ipwija);
             outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0, 51, 102, 0.2);
         }
 
-        .input-error {
-            border-color: #dc3545 !important;
-            background-color: #fff8f8;
-        }
-
-        .button-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        /* Perbaikan: Warna tombol diganti menjadi Biru */
+        /* Tombol Login - Biru Gelap Logo */
         .btn-login { 
-            background-color: #007bff; 
+            background-color: var(--biru-ipwija); 
             color: white; 
             border: none; 
             padding: 14px; 
@@ -135,11 +105,14 @@
             cursor: pointer; 
             font-weight: bold; 
             font-size: 1em;
-            transition: background 0.3s;
+            width: 100%;
+            transition: all 0.3s ease;
         }
 
         .btn-login:hover {
-            background-color: #0056b3;
+            background-color: #002244;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .btn-cancel { 
@@ -149,53 +122,58 @@
             padding: 10px; 
             border-radius: 8px; 
             cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 0.85em;
+            animation: fadeIn 0.3s;
         }
 
         .hidden { display: none; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <img src="https://hildahiu14.github.io/pbo/uas/logo_ipwija_b.png" alt="Logo IPWIJA" class="logo-top">
-
-    <div id="errorMsg" class="alert-error">
-        <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
-        <span>Silakan periksa kembali username dan password Anda</span>
-    </div>
+    <img src="https://hildahiu14.github.io/pbo/uas/logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
 
     <div class="box">
         <div id="form-login">
             <div class="brand-text">IM241</div>
             <div class="header-box">Silakan Login Terlebih Dahulu!</div>
             
+            <div id="errorMsg" class="alert-error">
+                Username atau Password Salah!
+            </div>
+
             <div class="input-group">
                 <i class="fas fa-user left-icon"></i>
-                <input type="text" id="userInp" placeholder="Masukkan Username" oninput="aplikasi.removeError()">
+                <input type="text" id="userInp" placeholder="Username" oninput="aplikasi.removeError()">
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock left-icon"></i>
-                <input type="password" id="passInp" placeholder="Masukkan Password" oninput="aplikasi.removeError()">
-                <i class="fas fa-eye-slash toggle-password" id="eyeIcon" onclick="aplikasi.toggleShowPassword()"></i>
+                <input type="password" id="passInp" placeholder="Password" oninput="aplikasi.removeError()">
             </div>
 
-            <div class="button-stack">
-                <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
-                <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
-            </div>
+            <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
+            <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
         </div>
 
         <div id="halaman-user" class="hidden">
-            <div class="brand-text" style="color: #28a745;">IM241</div>
-            <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
-            <h2 id="info-user" style="color: #28a745; margin: 0;"></h2>
-            <p>Selamat datang di sistem.</p>
-            <button class="btn-login" style="background-color: #dc3545; width: 100%;" onclick="aplikasi.logout()">Logout</button>
+            <div class="brand-text" style="color: #28a745;">SUCCESS</div>
+            <h2 id="info-user" style="color: #333; margin: 10px 0;"></h2>
+            <p>Selamat datang di sistem informasi.</p>
+            <button class="btn-login" style="background-color: var(--merah-ipwija);" onclick="aplikasi.logout()">Logout</button>
         </div>
     </div>
 
@@ -205,7 +183,6 @@
             this.key = 'db_user';
             this.init();
         }
-
         init() {
             const dataAwal = [
                 { username: "user", pw: "241111" },
@@ -216,75 +193,44 @@
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
-
-        getUsers() {
-            return JSON.parse(localStorage.getItem(this.key));
-        }
+        getUsers() { return JSON.parse(localStorage.getItem(this.key)); }
     }
 
     class LoginApp {
-        constructor() {
-            this.db = new Database();
-        }
-
-        toggleShowPassword() {
-            const passInput = document.getElementById('passInp');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (passInput.type === "password") {
-                passInput.type = "text";
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            } else {
-                passInput.type = "password";
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            }
-        }
-
+        constructor() { this.db = new Database(); }
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
             const errorBox = document.getElementById('errorMsg');
-            
             const user = uInput.value.trim();
             const pass = pInput.value.trim();
-            const dataUser = this.db.getUsers();
-
-            const found = dataUser.find(u => u.username === user && u.pw === pass);
+            const found = this.db.getUsers().find(u => u.username === user && u.pw === pass);
 
             if (found) {
                 this.pindahHalaman(found.username);
             } else {
-                errorBox.style.display = 'flex';
-                uInput.classList.add('input-error');
-                pInput.classList.add('input-error');
+                errorBox.style.display = 'block';
+                uInput.style.borderColor = '#dc3545';
+                pInput.style.borderColor = '#dc3545';
             }
         }
-
         removeError() {
-            const errorMsg = document.getElementById('errorMsg');
-            if(errorMsg) errorMsg.style.display = 'none';
-            document.getElementById('userInp').classList.remove('input-error');
-            document.getElementById('passInp').classList.remove('input-error');
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('userInp').style.borderColor = '#ddd';
+            document.getElementById('passInp').style.borderColor = '#ddd';
         }
-
         pindahHalaman(nama) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
             document.getElementById('info-user').innerText = `Hi, ${nama}`;
         }
-
         reset() {
             this.removeError();
             document.getElementById('userInp').value = "";
             document.getElementById('passInp').value = "";
-            document.getElementById('passInp').type = "password";
-            document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
         }
-
-        logout() {
-            location.reload();
-        }
+        logout() { location.reload(); }
     }
-
     const aplikasi = new LoginApp();
 </script>
 
