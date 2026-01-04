@@ -8,22 +8,20 @@
     
     <style>
         body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh; 
-    margin: 0;
-    /* Menggunakan link langsung dari repositori GitHub Anda */
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('https://hildahiu14.github.io/pbo/uas/gedung_ipwija.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    }
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://hildahiu14.github.io/pbo/uas/gedung_ipwija.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
 
-        /* Logo IPWIJA di paling atas */
         .logo-top {
             width: 100px;
             height: 100px;
@@ -50,7 +48,7 @@
         }
 
         .box { 
-            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar estetik */
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px; 
             border-radius: 15px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
@@ -59,11 +57,13 @@
             backdrop-filter: blur(5px);
         }
 
-        /* Ikon Gembok (Terkunci saat login) */
-        .lock-icon {
-            font-size: 3em;
-            color: #28a745;
+        /* Teks Pengganti Ikon Gembok */
+        .brand-text {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #007bff; /* Warna biru sesuai tema tombol */
             margin-bottom: 15px;
+            letter-spacing: 2px;
         }
 
         .header-box {
@@ -108,9 +108,9 @@
         }
         
         .input-group input:focus {
-            border-color: #28a745;
+            border-color: #007bff;
             outline: none;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
         }
 
         .input-error {
@@ -125,8 +125,9 @@
             margin-top: 20px;
         }
 
+        /* Perbaikan: Warna tombol diganti menjadi Biru */
         .btn-login { 
-            background-color: #28a745; 
+            background-color: #007bff; 
             color: white; 
             border: none; 
             padding: 14px; 
@@ -134,6 +135,11 @@
             cursor: pointer; 
             font-weight: bold; 
             font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #0056b3;
         }
 
         .btn-cancel { 
@@ -155,7 +161,7 @@
 </head>
 <body>
 
-    <img src="https://hildahiu14.github.io/pbo/uas/logo_ipwija.png" alt="Logo IPWIJA" class="logo-top">
+    <img src="https://hildahiu14.github.io/pbo/uas/logo_ipwija_b.png" alt="Logo IPWIJA" class="logo-top">
 
     <div id="errorMsg" class="alert-error">
         <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
@@ -164,7 +170,7 @@
 
     <div class="box">
         <div id="form-login">
-            <div class="lock-icon"><i class="fas fa-lock"></i></div>
+            <div class="brand-text">IM241</div>
             <div class="header-box">Silakan Login Terlebih Dahulu!</div>
             
             <div class="input-group">
@@ -185,7 +191,7 @@
         </div>
 
         <div id="halaman-user" class="hidden">
-            <div class="lock-icon" style="color: #28a745;"><i class="fas fa-lock-open"></i></div>
+            <div class="brand-text" style="color: #28a745;">IM241</div>
             <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
             <h2 id="info-user" style="color: #28a745; margin: 0;"></h2>
             <p>Selamat datang di sistem.</p>
@@ -254,7 +260,8 @@
         }
 
         removeError() {
-            document.getElementById('errorMsg').style.display = 'none';
+            const errorMsg = document.getElementById('errorMsg');
+            if(errorMsg) errorMsg.style.display = 'none';
             document.getElementById('userInp').classList.remove('input-error');
             document.getElementById('passInp').classList.remove('input-error');
         }
