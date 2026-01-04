@@ -8,25 +8,33 @@
         body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
         .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px; text-align: center; }
         input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
+        
+        /* Tombol Login Hijau */
+        .btn-login { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 5px; }
+        .btn-login:hover { background-color: #218838; }
+        
+        /* Tombol Cancel Putih */
+        .btn-cancel { width: 100%; padding: 10px; background-color: white; color: #333; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
+        .btn-cancel:hover { background-color: #f8f9fa; }
+        
         .hidden { display: none; }
-        #welcome-screen { color: #28a745; }
+        #welcome-text { color: #28a745; }
     </style>
 </head>
 <body>
 
     <div id="login-container" class="container">
-        <h2>Login</h2>
+        <h2>Login UAS PBO</h2>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="authApp.handleLogin()">Login</button>
+        <button class="btn-login" onclick="authApp.handleLogin()">Login</button>
+        <button class="btn-cancel" onclick="authApp.resetForm()">Cancel</button>
     </div>
 
     <div id="dashboard-container" class="container hidden">
-        <h2 id="welcome-text"></h2>
+        <h1 id="welcome-text"></h1>
         <p>Anda berhasil masuk ke sistem.</p>
-        <button onclick="authApp.handleLogout()" style="background-color: #dc3545;">Logout</button>
+        <button class="btn-cancel" onclick="authApp.handleLogout()">Logout</button>
     </div>
 
     <script>
@@ -41,13 +49,14 @@
         // --- LAYER LOGIKA (CONTROLLER) ---
         class AuthSystem {
             constructor() {
-                this.storageKey = 'app_users';
-                this.sessionKey = 'current_session';
+                // Menggunakan key unik agar tidak bentrok dengan data lama
+                this.storageKey = 'db_users_uas'; 
+                this.sessionKey = 'current_session_uas';
                 this.initDatabase();
             }
 
-            // Inisialisasi Database JSON di LocalStorage
             initDatabase() {
+                // Memastikan database awal tersedia di LocalStorage dalam format JSON
                 if (!localStorage.getItem(this.storageKey)) {
                     const initialUsers = [
                         new User('hilda', 'hilda241'),
@@ -58,9 +67,9 @@
                 }
             }
 
-            // Fungsi Autentikasi
             login(username, password) {
                 const users = JSON.parse(localStorage.getItem(this.storageKey));
+                // Mencari user sebagai object di dalam array
                 const foundUser = users.find(u => u.username === username && u.password === password);
 
                 if (foundUser) {
@@ -72,7 +81,6 @@
 
             logout() {
                 localStorage.removeItem(this.sessionKey);
-                location.reload(); 
             }
 
             getCurrentUser() {
@@ -94,12 +102,18 @@
                 if (this.auth.login(userIn, passIn)) {
                     this.renderDashboard();
                 } else {
-                    alert('Gagal login! Username atau password salah.');
+                    alert('Gagal Login!');
                 }
             }
 
             handleLogout() {
                 this.auth.logout();
+                location.reload(); 
+            }
+
+            resetForm() {
+                document.getElementById('username').value = "";
+                document.getElementById('password').value = "";
             }
 
             checkSession() {
@@ -116,7 +130,7 @@
             }
         }
 
-        // Instansiasi Objek
+        // Instansiasi Objek dari Class
         const myAuthSystem = new AuthSystem();
         const authApp = new AppUI(myAuthSystem);
 
