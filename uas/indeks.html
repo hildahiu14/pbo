@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>UAS PBO - Sistem Login</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
+        .box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        
+        /* Tombol Login Hijau */
+        .btn-login { background-color: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        
+        /* Tombol Cancel Putih */
+        .btn-cancel { background-color: white; color: black; border: 1px solid #ccc; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 5px; }
+        
+        .hidden { display: none; }
+        #info-user { color: #28a745; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <div id="form-login">
+        <h2>Login UAS</h2>
+        <input type="text" id="userInp" placeholder="Username">
+        <input type="password" id="passInp" placeholder="Password">
+        <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
+        <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
+    </div>
+
+    <div id="halaman-user" class="hidden">
+        <p id="info-user"></p>
+        <p>Selamat datang di sistem.</p>
+        <button class="btn-cancel" onclick="aplikasi.logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+    // Konsep PBO: Class untuk Database
+    class Database {
+        constructor() {
+            this.key = 'db_user';
+            this.init();
+        }
+
+        init() {
+            // Data User sebagai Object sesuai permintaan
+            const dataAwal = [
+                { username: "user", pw: "user241" },
+                { username: "mahasiswa", pw: "mahasiswa241" },
+                { username: "hilda", pw: "hilda241" }
+            ];
+            // Simpan ke LocalStorage menggunakan JSON
+            if (!localStorage.getItem(this.key)) {
+                localStorage.setItem(this.key, JSON.stringify(dataAwal));
+            }
+        }
+
+        getUsers() {
+            return JSON.parse(localStorage.getItem(this.key));
+        }
+    }
+
+    // Konsep PBO: Class Utama Aplikasi
+    class LoginApp {
+        constructor() {
+            this.db = new Database();
+        }
+
+        cekLogin() {
+            const user = document.getElementById('userInp').value;
+            const pass = document.getElementById('passInp').value;
+            const dataUser = this.db.getUsers();
+
+            // Mencari user di dalam object
+            const found = dataUser.find(u => u.username === user && u.pw === pass);
+
+            if (found) {
+                this.pindahHalaman(found.username);
+            } else {
+                alert("Gagal Login!");
+            }
+        }
+
+        pindahHalaman(nama) {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('halaman-user').classList.remove('hidden');
+            document.getElementById('info-user').innerText = `Hi, ${nama}`;
+        }
+
+        reset() {
+            document.getElementById('userInp').value = "";
+            document.getElementById('passInp').value = "";
+        }
+
+        logout() {
+            location.reload();
+        }
+    }
+
+    // Instansiasi Objek
+    const aplikasi = new LoginApp();
+</script>
+
+</body>
+</html> 
