@@ -2,124 +2,106 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Login OOP - LocalStorage</title>
+    <title>UAS PBO - Sistem Login</title>
     <style>
         body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
-        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
+        .box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        
+        /* Tombol Login Hijau */
+        .btn-login { background-color: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        
+        /* Tombol Cancel Putih */
+        .btn-cancel { background-color: white; color: black; border: 1px solid #ccc; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 5px; }
+        
         .hidden { display: none; }
-        #welcome-screen { color: #28a745; }
+        #info-user { color: #28a745; font-weight: bold; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
-    <div id="login-container" class="container">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="authApp.handleLogin()">Login</button>
+<div class="box">
+    <div id="form-login">
+        <h2>Login UAS</h2>
+        <input type="text" id="userInp" placeholder="Username">
+        <input type="password" id="passInp" placeholder="Password">
+        <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
+        <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
     </div>
 
-    <div id="dashboard-container" class="container hidden">
-        <h2 id="welcome-text"></h2>
-        <p>Anda berhasil masuk ke sistem.</p>
-        <button onclick="authApp.handleLogout()" style="background-color: #dc3545;">Logout</button>
+    <div id="halaman-user" class="hidden">
+        <p id="info-user"></p>
+        <p>Selamat datang di sistem.</p>
+        <button class="btn-cancel" onclick="aplikasi.logout()">Logout</button>
     </div>
+</div>
 
-    <script>
-        // --- LAYER DATA (MODEL) ---
-        class User {
-            constructor(username, password) {
-                this.username = username;
-                this.password = password;
+<script>
+    // Konsep PBO: Class untuk Database
+    class Database {
+        constructor() {
+            this.key = 'db_user';
+            this.init();
+        }
+
+        init() {
+            // Data User sebagai Object sesuai permintaan
+            const dataAwal = [
+                { username: "user", pw: "user241" },
+                { username: "mahasiswa", pw: "mahasiswa241" },
+                { username: "hilda", pw: "hilda241" }
+            ];
+            // Simpan ke LocalStorage menggunakan JSON
+            if (!localStorage.getItem(this.key)) {
+                localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
 
-        // --- LAYER LOGIKA (CONTROLLER) ---
-        class AuthSystem {
-            constructor() {
-                this.storageKey = 'app_users';
-                this.sessionKey = 'current_session';
-                this.initDatabase();
-            }
+        getUsers() {
+            return JSON.parse(localStorage.getItem(this.key));
+        }
+    }
 
-            // Inisialisasi Database JSON di LocalStorage
-            initDatabase() {
-                if (!localStorage.getItem(this.storageKey)) {
-                    const initialUsers = [
-                        new User('hilda', 'hilda241'),
-                        new User('user', 'user241'),
-                        new User('mahasiswa', 'mahasiswa241')
-                    ];
-                    localStorage.setItem(this.storageKey, JSON.stringify(initialUsers));
-                }
-            }
+    // Konsep PBO: Class Utama Aplikasi
+    class LoginApp {
+        constructor() {
+            this.db = new Database();
+        }
 
-            // Fungsi Autentikasi
-            login(username, password) {
-                const users = JSON.parse(localStorage.getItem(this.storageKey));
-                const foundUser = users.find(u => u.username === username && u.password === password);
+        cekLogin() {
+            const user = document.getElementById('userInp').value;
+            const pass = document.getElementById('passInp').value;
+            const dataUser = this.db.getUsers();
 
-                if (foundUser) {
-                    localStorage.setItem(this.sessionKey, JSON.stringify(foundUser));
-                    return true;
-                }
-                return false;
-            }
+            // Mencari user di dalam object
+            const found = dataUser.find(u => u.username === user && u.pw === pass);
 
-            logout() {
-                localStorage.removeItem(this.sessionKey);
-                location.reload(); 
-            }
-
-            getCurrentUser() {
-                return JSON.parse(localStorage.getItem(this.sessionKey));
+            if (found) {
+                this.pindahHalaman(found.username);
+            } else {
+                alert("Gagal Login!");
             }
         }
 
-        // --- LAYER ANTARMUKA (VIEW/UI HANDLER) ---
-        class AppUI {
-            constructor(authSystem) {
-                this.auth = authSystem;
-                this.checkSession();
-            }
-
-            handleLogin() {
-                const userIn = document.getElementById('username').value;
-                const passIn = document.getElementById('password').value;
-
-                if (this.auth.login(userIn, passIn)) {
-                    this.renderDashboard();
-                } else {
-                    alert('Gagal login! Username atau password salah.');
-                }
-            }
-
-            handleLogout() {
-                this.auth.logout();
-            }
-
-            checkSession() {
-                if (this.auth.getCurrentUser()) {
-                    this.renderDashboard();
-                }
-            }
-
-            renderDashboard() {
-                const user = this.auth.getCurrentUser();
-                document.getElementById('login-container').classList.add('hidden');
-                document.getElementById('dashboard-container').classList.remove('hidden');
-                document.getElementById('welcome-text').innerText = `Hi, ${user.username}`;
-            }
+        pindahHalaman(nama) {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('halaman-user').classList.remove('hidden');
+            document.getElementById('info-user').innerText = `Hi, ${nama}`;
         }
 
-        // Instansiasi Objek
-        const myAuthSystem = new AuthSystem();
-        const authApp = new AppUI(myAuthSystem);
+        reset() {
+            document.getElementById('userInp').value = "";
+            document.getElementById('passInp').value = "";
+        }
 
-    </script>
+        logout() {
+            location.reload();
+        }
+    }
+
+    // Instansiasi Objek
+    const aplikasi = new LoginApp();
+</script>
+
 </body>
 </html>
