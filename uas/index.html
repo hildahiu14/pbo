@@ -2,20 +2,101 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UAS PBO - Sistem Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
-        .box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        
-        /* Tombol Login Hijau */
-        .btn-login { background-color: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        
-        /* Tombol Cancel Putih */
-        .btn-cancel { background-color: white; color: black; border: 1px solid #ccc; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 5px; }
-        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #f0f2f5; 
+            margin: 0; 
+        }
+        .box { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            width: 320px; 
+            text-align: center; 
+        }
+        h2 { color: #333; margin-bottom: 20px; }
+
+        /* Style untuk Input dengan Ikon */
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #28a745;
+            outline: none;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+        }
+
+        /* Container Tombol agar Berdampingan */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-login { 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            flex: 2; /* Tombol login lebih lebar */
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+        .btn-login:hover { background-color: #218838; }
+
+        .btn-cancel { 
+            background-color: #6c757d; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            flex: 1; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .btn-cancel:hover { background-color: #5a6268; }
+
         .hidden { display: none; }
         #info-user { color: #28a745; font-weight: bold; font-size: 1.2em; }
+        
+        /* Logout Button Style */
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -23,21 +104,32 @@
 <div class="box">
     <div id="form-login">
         <h2>Login UAS</h2>
-        <input type="text" id="userInp" placeholder="Username">
-        <input type="password" id="passInp" placeholder="Password">
-        <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
-        <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
+        
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="userInp" placeholder="Masukkan Username">
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="passInp" placeholder="Masukkan Password">
+        </div>
+
+        <div class="button-group">
+            <button class="btn-cancel" onclick="aplikasi.reset()">Reset</button>
+            <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
+        </div>
     </div>
 
     <div id="halaman-user" class="hidden">
+        <i class="fas fa-circle-user" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
         <p id="info-user"></p>
         <p>Selamat datang di sistem.</p>
-        <button class="btn-cancel" onclick="aplikasi.logout()">Logout</button>
+        <button class="btn-logout" onclick="aplikasi.logout()">Logout</button>
     </div>
 </div>
 
 <script>
-    // Konsep PBO: Class untuk Database
     class Database {
         constructor() {
             this.key = 'db_user';
@@ -45,13 +137,11 @@
         }
 
         init() {
-            // Data User sebagai Object sesuai permintaan
             const dataAwal = [
                 { username: "user", pw: "user241" },
                 { username: "mahasiswa", pw: "mahasiswa241" },
                 { username: "hilda", pw: "hilda241" }
             ];
-            // Simpan ke LocalStorage menggunakan JSON
             if (!localStorage.getItem(this.key)) {
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
@@ -62,7 +152,6 @@
         }
     }
 
-    // Konsep PBO: Class Utama Aplikasi
     class LoginApp {
         constructor() {
             this.db = new Database();
@@ -73,13 +162,12 @@
             const pass = document.getElementById('passInp').value;
             const dataUser = this.db.getUsers();
 
-            // Mencari user di dalam object
             const found = dataUser.find(u => u.username === user && u.pw === pass);
 
             if (found) {
                 this.pindahHalaman(found.username);
             } else {
-                alert("Gagal Login!");
+                alert("Username atau Password Salah!");
             }
         }
 
@@ -99,7 +187,6 @@
         }
     }
 
-    // Instansiasi Objek
     const aplikasi = new LoginApp();
 </script>
 
