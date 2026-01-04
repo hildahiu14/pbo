@@ -3,58 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAS PBO - Sistem Login</title>
+    <title>UAS PBO - Sistem Login IPWIJA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS Dasar: Mengatur tampilan halaman agar di tengah (center) */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; 
-            flex-direction: column; /* Mengatur susunan ke bawah untuk notifikasi error luar */
+            flex-direction: column; 
             justify-content: center; 
             align-items: center; 
             height: 100vh; 
-            background-color: #f0f2f5; 
-            margin: 0; 
+            margin: 0;
+            /* Latar belakang gambar Gedung IPWIJA */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('gedung_ipwija.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        /* Tampilan Alert Gagal Login (DI LUAR KOTAK LOGIN) */
+        /* Logo IPWIJA di paling atas */
+        .logo-top {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
         .alert-error {
-            background-color: #f8d7da; /* Warna latar merah muda */
-            color: #721c24;           /* Warna teks merah gelap */
+            background-color: #f8d7da;
+            color: #721c24;
             border: 1px solid #f5c6cb;
             padding: 15px;
             border-radius: 12px;
-            margin-bottom: 20px;       /* Jarak ke kotak login di bawahnya */
+            margin-bottom: 20px;
             font-size: 0.95em;
-            display: none;             /* Sembunyi secara default */
+            display: none;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            width: 350px;              /* Sedikit lebih lebar dari kotak login */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            animation: fadeIn 0.3s ease; /* Animasi muncul halus */
+            width: 350px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+            z-index: 10;
         }
 
-        /* Kotak Putih Utama (Container Login) */
         .box { 
-            background: white; 
+            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar estetik */
             padding: 30px; 
             border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
             width: 320px; 
             text-align: center; 
+            backdrop-filter: blur(5px);
         }
 
-        /* Ikon Gembok Besar di atas judul */
+        /* Ikon Gembok (Terkunci saat login) */
         .lock-icon {
             font-size: 3em;
             color: #28a745;
             margin-bottom: 15px;
         }
 
-        /* Header Judul (Kotak Merah) */
         .header-box {
             background-color: #dc3545;
             color: white;
@@ -64,14 +74,12 @@
             font-weight: bold;
         }
 
-        /* Group Input: Membungkus input agar ikon bisa diletakkan di dalam (absolute) */
         .input-group {
             position: relative;
             margin-bottom: 15px;
             text-align: left;
         }
 
-        /* Ikon kiri (User/Lock) */
         .input-group i.left-icon {
             position: absolute;
             left: 12px;
@@ -80,7 +88,6 @@
             color: #888;
         }
         
-        /* Ikon mata (Toggle Password) */
         .toggle-password {
             position: absolute;
             right: 12px;
@@ -90,7 +97,6 @@
             cursor: pointer;
         }
 
-        /* Desain Input Fields */
         .input-group input {
             width: 100%;
             padding: 12px 40px 12px 40px;
@@ -100,20 +106,17 @@
             transition: 0.3s;
         }
         
-        /* Highlight hijau saat input diklik */
         .input-group input:focus {
             border-color: #28a745;
             outline: none;
             box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
         }
 
-        /* Efek Merah saat Login Gagal */
         .input-error {
             border-color: #dc3545 !important;
             background-color: #fff8f8;
         }
 
-        /* Stack Tombol: Menyusun Login dan Cancel secara vertikal */
         .button-stack {
             display: flex;
             flex-direction: column;
@@ -141,9 +144,8 @@
             cursor: pointer;
         }
 
-        .hidden { display: none; } /* Class untuk menyembunyikan elemen */
+        .hidden { display: none; }
 
-        /* Animasi Muncul Halus */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -152,6 +154,8 @@
 </head>
 <body>
 
+    <img src="logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
+
     <div id="errorMsg" class="alert-error">
         <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
         <span>Silakan periksa kembali username dan password Anda</span>
@@ -159,7 +163,7 @@
 
     <div class="box">
         <div id="form-login">
-            <div class="lock-icon"><i class="fas fa-lock-open"></i></div>
+            <div class="lock-icon"><i class="fas fa-lock"></i></div>
             <div class="header-box">Silahkan Login Terlebih Dahulu!</div>
             
             <div class="input-group">
@@ -180,7 +184,8 @@
         </div>
 
         <div id="halaman-user" class="hidden">
-            <i class="fas fa-circle-check" style="font-size: 60px; color: #28a745; margin-bottom: 15px;"></i>
+            <div class="lock-icon" style="color: #28a745;"><i class="fas fa-lock-open"></i></div>
+            <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
             <h2 id="info-user" style="color: #28a745; margin: 0;"></h2>
             <p>Selamat datang di sistem.</p>
             <button class="btn-login" style="background-color: #dc3545; width: 100%;" onclick="aplikasi.logout()">Logout</button>
@@ -188,17 +193,12 @@
     </div>
 
 <script>
-    /**
-     * CLASS DATABASE (PBO): 
-     * Bertanggung jawab untuk mengelola data user di LocalStorage.
-     */
     class Database {
         constructor() {
             this.key = 'db_user';
             this.init();
         }
 
-        // Inisialisasi data awal jika LocalStorage masih kosong
         init() {
             const dataAwal = [
                 { username: "user", pw: "241111" },
@@ -210,22 +210,16 @@
             }
         }
 
-        // Mengambil data user dari LocalStorage dan mengubahnya kembali jadi Array of Object
         getUsers() {
             return JSON.parse(localStorage.getItem(this.key));
         }
     }
 
-    /**
-     * CLASS LOGINAPP (PBO): 
-     * Berisi logika utama aplikasi (cek login, toggle password, reset).
-     */
     class LoginApp {
         constructor() {
-            this.db = new Database(); // Komposisi: Menggunakan objek Database
+            this.db = new Database();
         }
 
-        // Fungsi menampilkan/menyembunyikan password
         toggleShowPassword() {
             const passInput = document.getElementById('passInp');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -238,7 +232,6 @@
             }
         }
 
-        // Fungsi Validasi Login
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
@@ -248,34 +241,29 @@
             const pass = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
-            // Mencari kecocokan username dan password
             const found = dataUser.find(u => u.username === user && u.pw === pass);
 
             if (found) {
                 this.pindahHalaman(found.username);
             } else {
-                // MENAMPILKAN ERROR DI LUAR KOTAK
-                errorBox.style.display = 'flex'; 
+                errorBox.style.display = 'flex';
                 uInput.classList.add('input-error');
                 pInput.classList.add('input-error');
             }
         }
 
-        // Menghapus status error saat user mulai mengetik ulang
         removeError() {
             document.getElementById('errorMsg').style.display = 'none';
             document.getElementById('userInp').classList.remove('input-error');
             document.getElementById('passInp').classList.remove('input-error');
         }
 
-        // Berpindah ke tampilan dashboard user
         pindahHalaman(nama) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
             document.getElementById('info-user').innerText = `Hi, ${nama}`;
         }
 
-        // Reset semua field input
         reset() {
             this.removeError();
             document.getElementById('userInp').value = "";
@@ -284,13 +272,11 @@
             document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
         }
 
-        // Refresh halaman untuk logout
         logout() {
             location.reload();
         }
     }
 
-    // Instansiasi Objek Utama
     const aplikasi = new LoginApp();
 </script>
 
