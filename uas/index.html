@@ -7,12 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Variabel Warna Utama untuk Konsistensi */
-        :root {
-            --biru-ipwija: #003366; /* Warna biru gelap sesuai logo */
-            --merah-ipwija: #dc3545;
-        }
-
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; 
@@ -21,48 +15,65 @@
             align-items: center; 
             height: 100vh; 
             margin: 0;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://hildahiu14.github.io/pbo/uas/gedung_ipwija.jpg');
+            /* Latar belakang gambar Gedung IPWIJA */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('gedung_ipwija.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-        }
-
+            
+        
+        /* Logo IPWIJA di paling atas */
         .logo-top {
-            width: 120px;
+            width: 120px; /* Ukuran diperbesar sedikit agar jelas */
             height: auto;
             margin-bottom: 20px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 350px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+            z-index: 10;
         }
 
         .box { 
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar estetik */
             padding: 30px; 
             border-radius: 15px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
             width: 320px; 
             text-align: center; 
             backdrop-filter: blur(5px);
         }
 
-        /* Teks IM241 - Warna Biru Gelap Logo */
-        .brand-text {
-            font-size: 2.8em;
-            font-weight: 900;
-            color: var(--biru-ipwija);
-            margin-bottom: 10px;
-            letter-spacing: 3px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        /* Ikon Gembok (Terkunci saat login) */
+        .lock-icon {
+            font-size: 3em;
+            color: #28a745;
+            margin-bottom: 15px;
         }
 
         .header-box {
-            background-color: var(--merah-ipwija);
+            background-color: #dc3545;
             color: white;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 25px;
             font-weight: bold;
-            font-size: 0.9em;
         }
 
         .input-group {
@@ -78,26 +89,45 @@
             transform: translateY(-50%);
             color: #888;
         }
+        
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            cursor: pointer;
+        }
 
         .input-group input {
             width: 100%;
-            padding: 12px 40px;
+            padding: 12px 40px 12px 40px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
             transition: 0.3s;
         }
         
-        /* Highlight Fokus Input - Biru Gelap Logo */
         .input-group input:focus {
-            border-color: var(--biru-ipwija);
+            border-color: #28a745;
             outline: none;
-            box-shadow: 0 0 8px rgba(0, 51, 102, 0.2);
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
         }
 
-        /* Tombol Login - Biru Gelap Logo */
+        .input-error {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+
+        .button-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
         .btn-login { 
-            background-color: var(--biru-ipwija); 
+            background-color: #28a745; 
             color: white; 
             border: none; 
             padding: 14px; 
@@ -105,14 +135,6 @@
             cursor: pointer; 
             font-weight: bold; 
             font-size: 1em;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .btn-login:hover {
-            background-color: #002244;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .btn-cancel { 
@@ -122,58 +144,53 @@
             padding: 10px; 
             border-radius: 8px; 
             cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-            font-size: 0.85em;
-            animation: fadeIn 0.3s;
         }
 
         .hidden { display: none; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <img src="https://hildahiu14.github.io/pbo/uas/logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
+    <img src="logo_ipwija_b.png" alt="Logo IPWIJA" class="logo-top">
+
+    <div id="errorMsg" class="alert-error">
+        <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
+        <span>Silakan periksa kembali username dan password Anda</span>
+    </div>
 
     <div class="box">
         <div id="form-login">
-            <div class="brand-text">IM241</div>
-            <div class="header-box">Silakan Login Terlebih Dahulu!</div>
+            <div class="lock-icon"><i class="fas fa-lock"></i></div>
+            <div class="header-box">Silahkan Login Terlebih Dahulu!</div>
             
-            <div id="errorMsg" class="alert-error">
-                Username atau Password Salah!
-            </div>
-
             <div class="input-group">
                 <i class="fas fa-user left-icon"></i>
-                <input type="text" id="userInp" placeholder="Username" oninput="aplikasi.removeError()">
+                <input type="text" id="userInp" placeholder="Masukkan Username" oninput="aplikasi.removeError()">
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock left-icon"></i>
-                <input type="password" id="passInp" placeholder="Password" oninput="aplikasi.removeError()">
+                <input type="password" id="passInp" placeholder="Masukkan Password" oninput="aplikasi.removeError()">
+                <i class="fas fa-eye-slash toggle-password" id="eyeIcon" onclick="aplikasi.toggleShowPassword()"></i>
             </div>
 
-            <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
-            <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
+            <div class="button-stack">
+                <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
+                <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
+            </div>
         </div>
 
         <div id="halaman-user" class="hidden">
-            <div class="brand-text" style="color: #28a745;">SUCCESS</div>
-            <h2 id="info-user" style="color: #333; margin: 10px 0;"></h2>
-            <p>Selamat datang di sistem informasi.</p>
-            <button class="btn-login" style="background-color: var(--merah-ipwija);" onclick="aplikasi.logout()">Logout</button>
+            <div class="lock-icon" style="color: #28a745;"><i class="fas fa-lock-open"></i></div>
+            <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
+            <h2 id="info-user" style="color: #28a745; margin: 0;"></h2>
+            <p>Selamat datang di sistem.</p>
+            <button class="btn-login" style="background-color: #dc3545; width: 100%;" onclick="aplikasi.logout()">Logout</button>
         </div>
     </div>
 
@@ -183,6 +200,7 @@
             this.key = 'db_user';
             this.init();
         }
+
         init() {
             const dataAwal = [
                 { username: "user", pw: "241111" },
@@ -193,44 +211,74 @@
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
-        getUsers() { return JSON.parse(localStorage.getItem(this.key)); }
+
+        getUsers() {
+            return JSON.parse(localStorage.getItem(this.key));
+        }
     }
 
     class LoginApp {
-        constructor() { this.db = new Database(); }
+        constructor() {
+            this.db = new Database();
+        }
+
+        toggleShowPassword() {
+            const passInput = document.getElementById('passInp');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passInput.type = "password";
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            }
+        }
+
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
             const errorBox = document.getElementById('errorMsg');
+            
             const user = uInput.value.trim();
             const pass = pInput.value.trim();
-            const found = this.db.getUsers().find(u => u.username === user && u.pw === pass);
+            const dataUser = this.db.getUsers();
+
+            const found = dataUser.find(u => u.username === user && u.pw === pass);
 
             if (found) {
                 this.pindahHalaman(found.username);
             } else {
-                errorBox.style.display = 'block';
-                uInput.style.borderColor = '#dc3545';
-                pInput.style.borderColor = '#dc3545';
+                errorBox.style.display = 'flex';
+                uInput.classList.add('input-error');
+                pInput.classList.add('input-error');
             }
         }
+
         removeError() {
             document.getElementById('errorMsg').style.display = 'none';
-            document.getElementById('userInp').style.borderColor = '#ddd';
-            document.getElementById('passInp').style.borderColor = '#ddd';
+            document.getElementById('userInp').classList.remove('input-error');
+            document.getElementById('passInp').classList.remove('input-error');
         }
+
         pindahHalaman(nama) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
             document.getElementById('info-user').innerText = `Hi, ${nama}`;
         }
+
         reset() {
             this.removeError();
             document.getElementById('userInp').value = "";
             document.getElementById('passInp').value = "";
+            document.getElementById('passInp').type = "password";
+            document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
         }
-        logout() { location.reload(); }
+
+        logout() {
+            location.reload();
+        }
     }
+
     const aplikasi = new LoginApp();
 </script>
 
