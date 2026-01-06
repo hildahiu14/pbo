@@ -207,9 +207,9 @@
 
         init() {
             const dataAwal = [
-                { username: "hilda", pw: "123123" },
-                { username: "mahasiswa", pw: "241241" },
-                { username: "admin", pw: "123456" }
+                { username: "hilda", password: "123456" },
+                { username: "mahasiswa", password: "241241" },
+                { username: "admin", password: "098765" }
             ];
             if (!localStorage.getItem(this.key)) {
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
