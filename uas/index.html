@@ -207,9 +207,9 @@
 
         init() {
             const dataAwal = [
-                { username: "hilda", password: "123456" },
-                { username: "mahasiswa", password: "241241" },
-                { username: "admin", password: "098765" }
+                { username: "hilda", password: "123456", name: "Hilda Damayanti" },
+                { username: "mahasiswa", password: "241241", name: "Mahasiswa/i IM241" },
+                { username: "admin", password: "098765", name: "Admin IM241" }
             ];
             if (!localStorage.getItem(this.key)) {
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
@@ -247,10 +247,13 @@
             const pass = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
-            const found = dataUser.find(u => u.username.toLowerCase() === user.toLowerCase() && u.password === pass);
+            const found = dataUser.find(u =>
+                u.username.toLowerCase() === user.toLowerCase() &&
+                u.password === pass
+            );
 
             if (found) {
-                this.pindahHalaman(found.username);
+                this.pindahHalaman(found.name);
             } else {
                 errorBox.style.display = 'flex';
                 uInput.classList.add('input-error');
