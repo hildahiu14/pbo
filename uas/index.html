@@ -20,17 +20,17 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            
-        
-        /* Logo IPWIJA di paling atas */
+        }
+
+        /* Logo IPWIJA di dalam box */
         .logo-top {
-            width: 120px; /* Ukuran diperbesar sedikit agar jelas */
+            width: 100px; /* Ukuran disesuaikan agar pas di dalam kotak */
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: block;
             margin-left: auto;
             margin-right: auto;
-            }
+        }
 
         .alert-error {
             background-color: #f8d7da;
@@ -156,14 +156,14 @@
 </head>
 <body>
 
-    <img src="logo_ipwija_b.png" alt="Logo IPWIJA" class="logo-top">
-
     <div id="errorMsg" class="alert-error">
         <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
         <span>Silakan periksa kembali username dan password Anda</span>
     </div>
 
     <div class="box">
+        <img src="logo_ipwija_b.png" alt="Logo IPWIJA" class="logo-top">
+
         <div id="form-login">
             <div class="lock-icon"><i class="fas fa-lock"></i></div>
             <div class="header-box">Silahkan Login Terlebih Dahulu!</div>
