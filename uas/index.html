@@ -152,30 +152,30 @@
 
 <body>
 
-    /* Pesan error jika login gagal */
+    <!-- Pesan error jika login gagal -->
     <div id="errorMsg" class="alert-error">
         <i class="fas fa-circle-xmark"></i>
         <span>Silakan periksa kembali username dan password Anda</span>
     </div>
 
-    /* Box utama */
+    <!-- Box utama -->
     <div class="box">
 
-        /* Logo */
+        <!-- Logo -->
         <img src="logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
 
-        /* Form login */
+        <!-- Form login -->
         <div id="form-login">
             <div class="header-box">Silakan Login Terlebih Dahulu!</div>
 
-            /* Input username */
+            <!-- Input username -->
             <div class="input-group">
                 <i class="fas fa-user left-icon"></i>
                 <input type="text" id="userInp" placeholder="Masukkan Username"
                        oninput="aplikasi.removeError()">
             </div>
 
-            /* Input password */
+            <!-- Input password -->
             <div class="input-group">
                 <i class="fas fa-lock left-icon"></i>
                 <input type="password" id="passInp" placeholder="Masukkan Password"
@@ -184,14 +184,14 @@
                    onclick="aplikasi.toggleShowPassword()"></i>
             </div>
 
-            /* Tombol aksi */
+            <!-- Tombol aksi -->
             <div class="button-stack">
                 <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
                 <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
             </div>
         </div>
 
-        /* Halaman setelah login berhasil */
+        <!-- Halaman setelah login berhasil -->
         <div id="halaman-user" class="hidden">
             <span class="brand-success">Teknik Informatika</span>
             <h2 id="info-user"></h2>
