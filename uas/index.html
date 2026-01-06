@@ -24,9 +24,9 @@
 
         /* Logo IPWIJA di dalam box */
         .logo-top {
-            width: 100px; /* Ukuran disesuaikan agar pas di dalam kotak */
+            width: 100px;
             height: auto;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -51,7 +51,7 @@
         }
 
         .box { 
-            background: rgba(255, 255, 255, 0.95); /* Sedikit transparan agar estetik */
+            background: rgba(255, 255, 255, 0.95); 
             padding: 30px; 
             border-radius: 15px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
@@ -60,11 +60,13 @@
             backdrop-filter: blur(5px);
         }
 
-        /* Ikon Gembok (Terkunci saat login) */
-        .lock-icon {
-            font-size: 3em;
-            color: #28a745;
+        /* Pengganti Ikon Gembok menjadi Teks IM241 */
+        .brand-text {
+            font-size: 2em;
+            font-weight: 800;
+            color: #003366; /* Biru gelap senada logo */
             margin-bottom: 15px;
+            letter-spacing: 2px;
         }
 
         .header-box {
@@ -109,9 +111,9 @@
         }
         
         .input-group input:focus {
-            border-color: #28a745;
+            border-color: #003366; /* Fokus ke biru gelap */
             outline: none;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+            box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
         }
 
         .input-error {
@@ -126,8 +128,9 @@
             margin-top: 20px;
         }
 
+        /* Tombol Login Biru Gelap */
         .btn-login { 
-            background-color: #28a745; 
+            background-color: #003366; /* Biru gelap senada logo */
             color: white; 
             border: none; 
             padding: 14px; 
@@ -135,6 +138,11 @@
             cursor: pointer; 
             font-weight: bold; 
             font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #002244;
         }
 
         .btn-cancel { 
@@ -162,10 +170,10 @@
     </div>
 
     <div class="box">
-        <img src="logo_ipwija_b.png" alt="Logo IPWIJA" class="logo-top">
+        <img src="logo_ipwija.png" alt="Logo IPWIJA" class="logo-top">
 
         <div id="form-login">
-            <div class="lock-icon"><i class="fas fa-lock"></i></div>
+            <div class="brand-text">IM241</div>
             <div class="header-box">Silahkan Login Terlebih Dahulu!</div>
             
             <div class="input-group">
@@ -186,7 +194,7 @@
         </div>
 
         <div id="halaman-user" class="hidden">
-            <div class="lock-icon" style="color: #28a745;"><i class="fas fa-lock-open"></i></div>
+            <div class="brand-text" style="color: #28a745;">SUCCESS</div>
             <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
             <h2 id="info-user" style="color: #28a745; margin: 0;"></h2>
             <p>Selamat datang di sistem.</p>
@@ -244,43 +252,3 @@
             const dataUser = this.db.getUsers();
 
             const found = dataUser.find(u => u.username === user && u.pw === pass);
-
-            if (found) {
-                this.pindahHalaman(found.username);
-            } else {
-                errorBox.style.display = 'flex';
-                uInput.classList.add('input-error');
-                pInput.classList.add('input-error');
-            }
-        }
-
-        removeError() {
-            document.getElementById('errorMsg').style.display = 'none';
-            document.getElementById('userInp').classList.remove('input-error');
-            document.getElementById('passInp').classList.remove('input-error');
-        }
-
-        pindahHalaman(nama) {
-            document.getElementById('form-login').classList.add('hidden');
-            document.getElementById('halaman-user').classList.remove('hidden');
-            document.getElementById('info-user').innerText = `Hi, ${nama}`;
-        }
-
-        reset() {
-            this.removeError();
-            document.getElementById('userInp').value = "";
-            document.getElementById('passInp').value = "";
-            document.getElementById('passInp').type = "password";
-            document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
-        }
-
-        logout() {
-            location.reload();
-        }
-    }
-
-    const aplikasi = new LoginApp();
-</script>
-
-</body>
-</html>
