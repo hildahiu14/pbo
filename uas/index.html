@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAS PBO - Sistem Login IPWIJA</title>
+    <title>UAS PBO - Sistem Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -62,11 +62,11 @@
             backdrop-filter: blur(5px);
         }
 
-        /* Teks IM241 untuk halaman sukses */
+        /* Teks IM241 */
         .brand-success {
             font-size: 2.2em;
             font-weight: 800;
-            color: #003366; /* Biru gelap senada logo */
+            color: #003366; 
             margin-bottom: 15px;
             display: block;
         }
@@ -130,7 +130,7 @@
             margin-top: 20px;
         }
 
-        /* Tombol Login Biru Gelap */
+        /* Tombol Login Biru */
         .btn-login { 
             background-color: #003366; 
             color: white; 
@@ -207,9 +207,9 @@
 
         init() {
             const dataAwal = [
-                { username: "user", pw: "241111" },
-                { username: "mahasiswa", pw: "241222" },
-                { username: "hilda", pw: "241333" }
+                { username: "hilda", pw: "123123" },
+                { username: "mahasiswa", pw: "241241" },
+                { username: "admin", pw: "123456" }
             ];
             if (!localStorage.getItem(this.key)) {
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
