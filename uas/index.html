@@ -247,7 +247,7 @@
             const pass = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
-            const found = dataUser.find(u => u.username.toLowerCase() === user.toLowerCase() && u.pw === pass);
+            const found = dataUser.find(u => u.username.toLowerCase() === user.toLowerCase() && u.password === pass);
 
             if (found) {
                 this.pindahHalaman(found.username);
