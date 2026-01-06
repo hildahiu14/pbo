@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* BAGIAN CSS (STYLING)
-           Semua teks di dalam blok ini berfungsi untuk mengatur tampilan visual 
-        */
+        /* CSS: Mengatur tampilan layout agar berada di tengah layar (Centering) */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; 
@@ -18,17 +16,17 @@
             align-items: center; 
             height: 100vh; 
             margin: 0;
-
-           /* Menambahkan latar belakang gambar dengan overlay gelap agar teks mudah dibaca */
+            /* Background gambar dengan lapisan warna gelap agar form login terlihat kontras */
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('gedung_ipwija.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
-        /* Logo di bagian atas form */
+        /* Desain Logo */
         .logo-top {
             width: 100px;
+            height: auto;
             margin-bottom: 15px;
             display: block;
             margin-left: auto;
@@ -37,7 +35,7 @@
             border-radius: 50%; 
         }
 
-        /* Box pesan error jika login gagal */
+        /* Styling Notifikasi Error (Alert) */
         .alert-error {
             background-color: #f8d7da;
             color: #721c24;
@@ -45,189 +43,120 @@
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
-            display: none; /* Disembunyikan secara default */
+            display: none; /* Awalnya disembunyikan, akan muncul jika login gagal */
             align-items: center;
+            justify-content: center;
             gap: 12px;
             width: 350px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
         }
 
-        /* Box utama login */
+        /* Styling Container Form (Box Putih) */
         .box { 
             background: rgba(255, 255, 255, 0.95); 
             padding: 30px; 
             border-radius: 15px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
             width: 320px; 
             text-align: center; 
         }
 
-        /* Judul setelah login berhasil */
-        .brand-success {
-            font-size: 2.2em;
-            font-weight: bold;
-            color: #003366; 
-        }
-
-        /* Header form login */
-        .header-box {
-            background-color: #dc3545;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-
-        /* Group input username dan password */
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        /* Icon di sebelah kiri input */
-        .left-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        /* Icon mata untuk show/hide password */
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
-
-        /* Style input text */
-        .input-group input {
-            width: 100%;
-            padding: 12px 40px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        /* Style input jika error */
-        .input-error {
-            border-color: #dc3545;
-            background-color: #fff8f8;
-        }
-
-        /* Container tombol */
-        .button-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        /* Tombol login */
+        /* Warna Tombol sesuai instruksi soal: Login Biru, Cancel Putih/Transparan */
         .btn-login { 
             background-color: #003366; 
             color: white; 
             border: none; 
             padding: 14px; 
             border-radius: 8px; 
-            cursor: pointer;
-            font-weight: bold;
+            cursor: pointer; 
+            font-weight: bold; 
         }
 
-        /* Tombol cancel */
         .btn-cancel { 
             background-color: transparent; 
+            color: #777; 
             border: 1px solid #ccc; 
             padding: 10px; 
             border-radius: 8px; 
+            cursor: pointer;
         }
 
-        /* Class bantuan untuk menghilangkan elemen dari layar */
-        .hidden {
-            display: none;
+        .hidden { display: none; } /* Class untuk menyembunyikan elemen */
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-
 <body>
 
-    <!-- Pesan error jika login gagal -->
     <div id="errorMsg" class="alert-error">
-        <i class="fas fa-circle-xmark"></i>
-        <span>Silakan periksa kembali username dan password Anda</span>
+        <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
+        <span>Gagal Login! Periksa kembali data Anda</span>
     </div>
 
-    <!-- Box utama -->
     <div class="box">
-
-        <!-- Logo -->
         <img src="logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
 
-        <!-- Form login -->
         <div id="form-login">
-            <div class="header-box">Silakan Login Terlebih Dahulu!</div>
-
-            <!-- Input username -->
-            <div class="input-group">
-                <i class="fas fa-user left-icon"></i>
-                <input type="text" id="userInp" placeholder="Masukkan Username"
-                       oninput="aplikasi.removeError()">
+            <div class="header-box" style="background-color: #dc3545; color: white; padding: 12px; border-radius: 8px; margin-bottom: 25px; font-weight: bold;">
+                Silakan Login Terlebih Dahulu!
+            </div>
+            
+            <div class="input-group" style="position: relative; margin-bottom: 15px; text-align: left;">
+                <i class="fas fa-user" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                <input type="text" id="userInp" placeholder="Masukkan Username" style="width: 100%; padding: 12px 12px 12px 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #ddd;" oninput="aplikasi.removeError()">
             </div>
 
-            <!-- Input password -->
-            <div class="input-group">
-                <i class="fas fa-lock left-icon"></i>
-                <input type="password" id="passInp" placeholder="Masukkan Password"
-                       oninput="aplikasi.removeError()">
-                <i class="fas fa-eye-slash toggle-password"
-                   onclick="aplikasi.toggleShowPassword()"></i>
+            <div class="input-group" style="position: relative; margin-bottom: 15px; text-align: left;">
+                <i class="fas fa-lock" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                <input type="password" id="passInp" placeholder="Masukkan Password" style="width: 100%; padding: 12px 12px 12px 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #ddd;" oninput="aplikasi.removeError()">
+                <i class="fas fa-eye-slash" id="eyeIcon" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="aplikasi.toggleShowPassword()"></i>
             </div>
 
-            <!-- Tombol aksi -->
-            <div class="button-stack">
+            <div class="button-stack" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                 <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
                 <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
             </div>
         </div>
 
-        <!-- Halaman setelah login berhasil -->
         <div id="halaman-user" class="hidden">
-            <span class="brand-success">Teknik Informatika</span>
-            <h2 id="info-user"></h2>
+            <span style="font-size: 2.2em; font-weight: 800; color: #003366; margin-bottom: 15px; display: block;">Teknik Informatika</span>
+            <i class="fas fa-circle-check" style="font-size: 50px; color: #003366; margin-bottom: 10px;"></i>
+            <h2 id="info-user" style="color: #003366; margin: 0;"></h2>
             <p>Anda berhasil login.</p>
-            <button class="btn-login" onclick="aplikasi.logout()">Logout</button>
+            <button class="btn-login" style="background-color: #dc3545; width: 100%;" onclick="aplikasi.logout()">Logout</button>
         </div>
     </div>
 
 <script>
     /**
      * 1. CLASS DATABASE (MODEL)
-     * Mengelola data mentah dan interaksi dengan LocalStorage browser.
+     * Mengelola penyimpanan data menggunakan konsep Encapsulation.
      */
     class Database {
         constructor() {
-            // Nama tabel/key dalam penyimpanan lokal browser
-            this.key = 'db_user';
-            // Inisialisasi data default saat aplikasi dijalankan
+            this.key = 'db_user'; // Key untuk LocalStorage
             this.init();
         }
 
-        // Menyiapkan data JSON awal untuk simulasi database
+        // Method untuk inisialisasi 3 akun user dalam format JSON
         init() {
             const dataAwal = [
                 { username: "hilda", password: "123456", name: "Hilda Damayanti" },
                 { username: "mahasiswa", password: "241241", name: "Mahasiswa/i IM241" },
                 { username: "admin", password: "098765", name: "Admin IM241" }
             ];
-
-            // Simpan data ke storage jika belum pernah ada sebelumnya
+            
+            // Simpan ke LocalStorage hanya jika data belum ada
             if (!localStorage.getItem(this.key)) {
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
 
-        // Mengambil seluruh data user dan mengubahnya kembali ke format Objek/Array
+        // Method untuk mengambil data JSON dan diubah kembali menjadi Array Objek
         getUsers() {
             return JSON.parse(localStorage.getItem(this.key));
         }
@@ -235,19 +164,18 @@
 
     /**
      * 2. CLASS LOGINAPP (CONTROLLER)
-     * Mengatur logika alur kerja aplikasi dari login hingga logout.
+     * Mengatur logika aplikasi dan interaksi antara User, Data, dan Tampilan (UI).
      */
     class LoginApp {
         constructor() {
-            // Instansiasi objek Database di dalam LoginApp (Konsep Komposisi PBO)
+            // Komposisi: Class LoginApp memiliki objek Database
             this.db = new Database();
         }
 
-        // Fungsi untuk mengubah tipe input dari password ke teks atau sebaliknya
+        // Fitur interaktif untuk melihat password
         toggleShowPassword() {
             const passInput = document.getElementById('passInp');
             const eyeIcon = document.getElementById('eyeIcon');
-
             if (passInput.type === "password") {
                 passInput.type = "text";
                 eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
@@ -257,71 +185,59 @@
             }
         }
 
-        // Logika utama validasi kredensial login
+        // Logika utama validasi Login
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
             const errorBox = document.getElementById('errorMsg');
-
-            const user = uInput.value.trim();
-            const pass = pInput.value.trim();
-
-            // Mengambil data user dari database internal
+            
+            const userValue = uInput.value.trim();
+            const passValue = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
-            // Pencarian data yang cocok 
-            const found = dataUser.find(u =>
-                u.username.toLowerCase() === user.toLowerCase() &&
-                u.password === pass
-            );
+            // Mencari user yang username & passwordnya cocok
+            const found = dataUser.find(u => u.username.toLowerCase() === userValue.toLowerCase() && u.password === passValue);
 
             if (found) {
-                // Jika sukses: pindah tampilan ke halaman sambutan
-                this.pindahHalaman(found.name);
+                this.pindahHalaman(found.name); // Kirim Nama Lengkap ke halaman baru
             } else {
-                // Jika gagal: tampilkan pesan error dan beri border merah
-                errorBox.style.display = 'flex';
-                uInput.classList.add('input-error');
-                pInput.classList.add('input-error');
+                errorBox.style.display = 'flex'; // Tampilkan alert Gagal Login!
+                uInput.style.borderColor = '#dc3545';
+                pInput.style.borderColor = '#dc3545';
             }
         }
 
-        // Menghapus tanda error pada input saat user mulai memperbaiki ketikan
+        // Method untuk membersihkan UI Error saat user mengetik ulang
         removeError() {
             document.getElementById('errorMsg').style.display = 'none';
-            document.getElementById('userInp').classList.remove('input-error');
-            document.getElementById('passInp').classList.remove('input-error');
+            document.getElementById('userInp').style.borderColor = '#ddd';
+            document.getElementById('passInp').style.borderColor = '#ddd';
         }
 
-        // Fungsi UI untuk menyembunyikan form dan menampilkan sapaan user
-        pindahHalaman(nama) {
+        // Method untuk mengubah tampilan dari Form Login ke Dashboard User
+        pindahHalaman(namaLengkap) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
-
-            // Format nama agar rapi (Huruf pertama kapital)
-            const namaKapital = nama.charAt(0).toUpperCase() + nama.slice(1);
-            document.getElementById('info-user').innerText = `Selamat Datang, ${namaKapital}`;
+            
+            // Menampilkan informasi user
+            document.getElementById('info-user').innerText = `Hi, ${namaLengkap}`;
         }
 
-        // Mengembalikan form ke kondisi kosong (bersih)
+        // Method untuk tombol Cancel
         reset() {
             this.removeError();
             document.getElementById('userInp').value = "";
             document.getElementById('passInp').value = "";
-            document.getElementById('passInp').type = "password";
-            document.getElementById('eyeIcon').classList.replace('fa-eye', 'fa-eye-slash');
         }
 
-        // Proses keluar: menyegarkan halaman untuk kembali ke menu login
+        // Method Logout
         logout() {
-            location.reload();
+            location.reload(); // Refresh halaman untuk kembali ke awal
         }
     }
 
-    /**
-     * 3. INSTANSIASI OBJEK
-     * Membuat satu objek global 'aplikasi' agar bisa diakses oleh event onclick di HTML.
-     */
+    // 3. INSTANSIASI OBJEK
+    // Menjalankan aplikasi dengan membuat instance dari class LoginApp
     const aplikasi = new LoginApp();
 </script>
 
