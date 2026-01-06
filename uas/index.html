@@ -30,8 +30,8 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            background-color: rgba(255, 255, 255, 0.95); /* Menyesuaikan warna box */
-            border-radius: 50%; /* Membuat area background bulat sesuai logo */
+            background-color: rgba(255, 255, 255, 0.95); 
+            border-radius: 50%; 
         }
 
         .alert-error {
@@ -69,12 +69,6 @@
             color: #003366; /* Biru gelap senada logo */
             margin-bottom: 15px;
             display: block;
-        }
-
-        .lock-icon {
-            font-size: 3em;
-            color: #28a745;
-            margin-bottom: 15px;
         }
 
         .header-box {
@@ -176,8 +170,7 @@
         <img src="logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
 
         <div id="form-login">
-            <div class="lock-icon"><i class="fas fa-lock"></i></div>
-            <div class="header-box">Silahkan Login Terlebih Dahulu!</div>
+            <div class="header-box">Silakan Login Terlebih Dahulu!</div>
             
             <div class="input-group">
                 <i class="fas fa-user left-icon"></i>
@@ -198,8 +191,8 @@
 
         <div id="halaman-user" class="hidden">
             <span class="brand-success">IM241</span>
-            <i class="fas fa-circle-check" style="font-size: 50px; color: #28a745; margin-bottom: 10px;"></i>
-            <h2 id="info-user" style="color: #28a745; margin: 0;"></h2>
+            <i class="fas fa-circle-check" style="font-size: 50px; color: #003366; margin-bottom: 10px;"></i>
+            <h2 id="info-user" style="color: #003366; margin: 0;"></h2>
             <p>Selamat datang di sistem.</p>
             <button class="btn-login" style="background-color: #dc3545; width: 100%;" onclick="aplikasi.logout()">Logout</button>
         </div>
@@ -254,7 +247,7 @@
             const pass = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
-            const found = dataUser.find(u => u.username === user && u.pw === pass);
+            const found = dataUser.find(u => u.username.toLowerCase() === user.toLowerCase() && u.pw === pass);
 
             if (found) {
                 this.pindahHalaman(found.username);
@@ -274,7 +267,9 @@
         pindahHalaman(nama) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
-            document.getElementById('info-user').innerText = `Hi, ${nama}`;
+            // Membuat huruf pertama kapital (Capitalize)
+            const namaKapital = nama.charAt(0).toUpperCase() + nama.slice(1);
+            document.getElementById('info-user').innerText = `Hi, ${namaKapital}`;
         }
 
         reset() {
