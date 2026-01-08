@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UAS PBO - Sistem Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -21,11 +21,15 @@
             background-attachment: fixed;
         }
 
-        /* Mencegah warna orange dan border aneh di HP */
-        input:focus {
-            outline: none !important;
-            border-color: #003366 !important;
-            box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
+        .logo-top {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: rgba(255, 255, 255, 0.95); 
+            border-radius: 50%; 
         }
 
         .alert-error {
@@ -39,17 +43,17 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            width: 310px; /* Dipersempit agar pas di layar HP kecil */
+            width: 350px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             animation: fadeIn 0.3s ease;
         }
 
         .box { 
             background: rgba(255, 255, 255, 0.95); 
-            padding: 25px; 
+            padding: 30px; 
             border-radius: 15px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
-            width: 290px; 
+            width: 320px; 
             text-align: center; 
         }
 
@@ -69,6 +73,7 @@
             border: 1px solid #ccc; 
             padding: 10px; 
             border-radius: 8px; 
+            cursor: pointer;
         }
 
         .hidden { display: none; }
@@ -83,37 +88,39 @@
 
     <div id="errorMsg" class="alert-error">
         <i class="fas fa-circle-xmark" style="font-size: 20px;"></i>
-        <span>Login Gagal! Cek data Anda.</span>
+        <span>Silakan periksa kembali username dan password Anda</span>
     </div>
 
     <div class="box">
-        <img src="logo_ipwija.jpg" alt="Logo" style="width: 80px; margin-bottom: 10px;">
+        <img src="logo_ipwija.jpg" alt="Logo IPWIJA" class="logo-top">
 
         <div id="form-login">
-            <h3 style="color: #dc3545; margin-bottom: 20px;">Silakan Login</h3>
+            <div class="header-box" style="background-color: #dc3545; color: white; padding: 12px; border-radius: 8px; margin-bottom: 25px; font-weight: bold;">
+                Silakan Login Terlebih Dahulu!
+            </div>
             
-            <div style="position: relative; margin-bottom: 15px; text-align: left;">
-                <i class="fas fa-user" style="position: absolute; left: 12px; top: 14px; color: #888;"></i>
-                <input type="text" id="userInp" autocomplete="off" placeholder="Username" style="width: 100%; padding: 12px 12px 12px 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #ddd;" oninput="aplikasi.removeError()">
+            <div class="input-group" style="position: relative; margin-bottom: 15px; text-align: left;">
+                <i class="fas fa-user" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                <input type="text" id="userInp" placeholder="Masukkan Username" style="width: 100%; padding: 12px 12px 12px 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #ddd;" oninput="aplikasi.removeError()">
             </div>
 
-            <div style="position: relative; margin-bottom: 15px; text-align: left;">
-                <i class="fas fa-lock" style="position: absolute; left: 12px; top: 14px; color: #888;"></i>
-                <input type="password" id="passInp" placeholder="Password" style="width: 100%; padding: 12px 12px 12px 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #ddd;" oninput="aplikasi.removeError()">
-                <i class="fas fa-eye-slash" id="eyeIcon" style="position: absolute; right: 12px; top: 14px; cursor: pointer; color: #888;" onclick="aplikasi.toggleShowPassword()"></i>
+            <div class="input-group" style="position: relative; margin-bottom: 15px; text-align: left;">
+                <i class="fas fa-lock" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                <input type="password" id="passInp" placeholder="Masukkan Password" style="width: 100%; padding: 12px 12px 12px 40px; box-sizing: border-box; border-radius: 8px; border: 1px solid #ddd;" oninput="aplikasi.removeError()">
+                <i class="fas fa-eye-slash" id="eyeIcon" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888;" onclick="aplikasi.toggleShowPassword()"></i>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="button-stack" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                 <button class="btn-login" onclick="aplikasi.cekLogin()">Login</button>
                 <button class="btn-cancel" onclick="aplikasi.reset()">Cancel</button>
             </div>
         </div>
 
         <div id="halaman-user" class="hidden">
-            <span style="font-size: 1.8em; font-weight: 800; color: #003366; display: block;">IM241</span>
-            <i class="fas fa-circle-check" style="font-size: 50px; color: #003366; margin: 15px 0;"></i>
+            <span style="font-size: 2.2em; font-weight: 800; color: #003366; margin-bottom: 15px; display: block;">Teknik Informatika</span>
+            <i class="fas fa-circle-check" style="font-size: 50px; color: #003366; margin-bottom: 10px;"></i>
             <h2 id="info-user" style="color: #003366; margin: 0;"></h2>
-            <p>Berhasil masuk sistem.</p>
+            <p>Selamat, Anda berhasil login.</p>
             <button class="btn-login" style="background-color: #dc3545; width: 100%;" onclick="aplikasi.logout()">Logout</button>
         </div>
     </div>
@@ -132,9 +139,10 @@
                 { username: "admin", password: "098765", name: "Admin IM241" }
             ];
             
-            // Logika Auto-Update: Hapus dan timpa jika data di HP versi lama
-            const dataLama = localStorage.getItem(this.key);
-            if (!dataLama || !dataLama.includes('"name"')) {
+            // Cek apakah data sudah ada dan apakah data tersebut sudah memiliki properti 'name'
+            const storedData = localStorage.getItem(this.key);
+            if (!storedData || !storedData.includes('"name"')) {
+                // Jika data belum ada atau data lama (tanpa 'name'), perbarui LocalStorage
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
@@ -152,24 +160,30 @@
         toggleShowPassword() {
             const passInput = document.getElementById('passInp');
             const eyeIcon = document.getElementById('eyeIcon');
-            const isPass = passInput.type === "password";
-            passInput.type = isPass ? "text" : "password";
-            eyeIcon.classList.toggle('fa-eye-slash');
-            eyeIcon.classList.toggle('fa-eye');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passInput.type = "password";
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            }
         }
 
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
-            const userValue = uInput.value.trim().toLowerCase(); // Paksa huruf kecil
-            const passValue = pInput.value.trim();
+            const errorBox = document.getElementById('errorMsg');
             
-            const found = this.db.getUsers().find(u => u.username === userValue && u.password === passValue);
+            const userValue = uInput.value.trim().toLowerCase(); // lowercase untuk cegah error keyboard HP
+            const passValue = pInput.value.trim();
+            const dataUser = this.db.getUsers();
+
+            const found = dataUser.find(u => u.username.toLowerCase() === userValue && u.password === passValue);
 
             if (found) {
                 this.pindahHalaman(found.name);
             } else {
-                document.getElementById('errorMsg').style.display = 'flex';
+                errorBox.style.display = 'flex';
                 uInput.style.borderColor = '#dc3545';
                 pInput.style.borderColor = '#dc3545';
             }
@@ -181,14 +195,16 @@
             document.getElementById('passInp').style.borderColor = '#ddd';
         }
 
-        pindahHalaman(nama) {
+        pindahHalaman(namaLengkap) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
-            document.getElementById('info-user').innerText = `Hi, ${nama}`;
+            document.getElementById('info-user').innerText = `Hi, ${namaLengkap}`;
         }
 
         reset() {
-            location.reload();
+            this.removeError();
+            document.getElementById('userInp').value = "";
+            document.getElementById('passInp').value = "";
         }
 
         logout() {
@@ -198,5 +214,6 @@
 
     const aplikasi = new LoginApp();
 </script>
+
 </body>
 </html>
