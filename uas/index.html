@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* CSS: Mengatur tampilan layout agar berada di tengah layar (Centering) */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             display: flex; 
@@ -15,12 +16,14 @@
             align-items: center; 
             height: 100vh; 
             margin: 0;
+            /* Background gambar dengan lapisan warna gelap agar form login terlihat kontras */
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('gedung_ipwija.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
+        /* Desain Logo IPWIJA */
         .logo-top {
             width: 100px;
             height: auto;
@@ -32,6 +35,7 @@
             border-radius: 50%; 
         }
 
+        /* Styling Notifikasi Error (Alert) */
         .alert-error {
             background-color: #f8d7da;
             color: #721c24;
@@ -39,7 +43,7 @@
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
-            display: none;
+            display: none; /* Muncul jika login gagal */
             align-items: center;
             justify-content: center;
             gap: 12px;
@@ -48,6 +52,7 @@
             animation: fadeIn 0.3s ease;
         }
 
+        /* Styling Container Form (Box Putih) */
         .box { 
             background: rgba(255, 255, 255, 0.95); 
             padding: 30px; 
@@ -57,6 +62,7 @@
             text-align: center; 
         }
 
+        /* Tombol Login Biru & Cancel Transparan */
         .btn-login { 
             background-color: #003366; 
             color: white; 
@@ -76,7 +82,7 @@
             cursor: pointer;
         }
 
-        .hidden { display: none; }
+        .hidden { display: none; } /* Class untuk menyembunyikan elemen */
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -126,12 +132,20 @@
     </div>
 
 <script>
+    /**
+     * 1. CLASS DATABASE (MODEL)
+     * Mengelola penyimpanan data user di LocalStorage menggunakan konsep Encapsulation.
+     */
     class Database {
         constructor() {
-            this.key = 'db_user';
+            this.key = 'db_user'; // Nama kunci penyimpanan di browser
             this.init();
         }
 
+        /**
+         * Method init: Menyiapkan data awal jika belum ada.
+         * Ditambahkan fitur auto-update untuk mendeteksi data lama di HP.
+         */
         init() {
             const dataAwal = [
                 { username: "hilda", password: "123456", name: "Hilda Damayanti" },
@@ -139,24 +153,31 @@
                 { username: "admin", password: "098765", name: "Admin IM241" }
             ];
             
-            // Cek apakah data sudah ada dan apakah data tersebut sudah memiliki properti 'name'
             const storedData = localStorage.getItem(this.key);
+            
+            // Perbaikan: Jika data kosong atau data lama (tanpa properti 'name'), maka timpa dengan yang baru
             if (!storedData || !storedData.includes('"name"')) {
-                // Jika data belum ada atau data lama (tanpa 'name'), perbarui LocalStorage
                 localStorage.setItem(this.key, JSON.stringify(dataAwal));
             }
         }
 
+        // Method untuk mengambil data JSON dan diubah kembali menjadi Array Objek
         getUsers() {
             return JSON.parse(localStorage.getItem(this.key));
         }
     }
 
+    /**
+     * 2. CLASS LOGINAPP (CONTROLLER)
+     * Mengatur logika aplikasi, validasi login, dan manipulasi tampilan (DOM).
+     */
     class LoginApp {
         constructor() {
+            // Relasi Komposisi: Class LoginApp menggunakan objek dari class Database
             this.db = new Database();
         }
 
+        // Method untuk menampilkan/menyembunyikan password (Show/Hide Password)
         toggleShowPassword() {
             const passInput = document.getElementById('passInp');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -169,49 +190,64 @@
             }
         }
 
+        /**
+         * Method cekLogin: Validasi input user.
+         * Ditambahkan .toLowerCase() agar tidak error jika keyboard HP otomatis huruf kapital.
+         */
         cekLogin() {
             const uInput = document.getElementById('userInp');
             const pInput = document.getElementById('passInp');
             const errorBox = document.getElementById('errorMsg');
             
-            const userValue = uInput.value.trim().toLowerCase(); // lowercase untuk cegah error keyboard HP
+            const userValue = uInput.value.trim().toLowerCase(); // Menyamakan ke huruf kecil
             const passValue = pInput.value.trim();
             const dataUser = this.db.getUsers();
 
+            // Mencari user di array database yang cocok dengan input
             const found = dataUser.find(u => u.username.toLowerCase() === userValue && u.password === passValue);
 
             if (found) {
-                this.pindahHalaman(found.name);
+                this.pindahHalaman(found.name); // Berhasil: Pindah halaman membawa Nama Lengkap
             } else {
-                errorBox.style.display = 'flex';
+                errorBox.style.display = 'flex'; // Gagal: Tampilkan alert merah
                 uInput.style.borderColor = '#dc3545';
                 pInput.style.borderColor = '#dc3545';
             }
         }
 
+        // Method untuk menghilangkan tanda error saat user mengetik kembali
         removeError() {
             document.getElementById('errorMsg').style.display = 'none';
             document.getElementById('userInp').style.borderColor = '#ddd';
             document.getElementById('passInp').style.borderColor = '#ddd';
         }
 
+        // Method untuk menyembunyikan form login dan menampilkan dashboard user
         pindahHalaman(namaLengkap) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('halaman-user').classList.remove('hidden');
+            
+            // Menampilkan kalimat sapaan dinamis "Hi, Nama Pengguna"
             document.getElementById('info-user').innerText = `Hi, ${namaLengkap}`;
         }
 
+        // Method untuk mereset inputan
         reset() {
             this.removeError();
             document.getElementById('userInp').value = "";
             document.getElementById('passInp').value = "";
         }
 
+        // Method Logout: Mengembalikan aplikasi ke kondisi awal
         logout() {
-            location.reload();
+            location.reload(); 
         }
     }
 
+    /**
+     * 3. INSTANSIASI OBJEK
+     * Membuat instance objek 'aplikasi' dari class LoginApp untuk memulai sistem.
+     */
     const aplikasi = new LoginApp();
 </script>
 
