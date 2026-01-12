@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Ultah OOP</title>
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --bg-color: #f7f7f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #app-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            z-index: 10;
+            width: 300px;
+        }
+
+        input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .celebration-text {
+            display: none;
+            color: var(--primary-color);
+        }
+
+        /* Animasi Balon */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 70px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float Up 5s linear forwards;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-120vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <div id="input-section">
+            <h2>Siapa yang Ultah?</h2>
+            <input type="text" id="nameInput" placeholder="Masukkan nama...">
+            <button onclick="birthdayApp.startCelebration()">Rayakan!</button>
+        </div>
+
+        <div id="display-section" class="celebration-text">
+            <h1 id="greeting"></h1>
+            <p id="message"></p>
+            <button onclick="location.reload()">Ulangi</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * KONSEP OOP:
+         * 1. Class Person: Menyimpan data entitas yang berulang tahun.
+         * 2. Class BirthdayUI: Mengatur manipulasi DOM dan tampilan.
+         * 3. Class Celebration: Logika efek visual (balon).
+         */
+
+        class Person {
+            constructor(name) {
+                this.name = name;
+            }
+
+            getGreeting() {
+                return `Selamat Ulang Tahun, ${this.name}! 🎂`;
+            }
+        }
+
+        class Celebration {
+            createBalloon() {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                
+                // Variasi warna dan posisi acak
+                const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#1a535c', '#ff9f1c'];
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                document.body.appendChild(balloon);
+
+                // Hapus elemen setelah animasi selesai agar tidak membebani memori
+                setTimeout(() => balloon.remove(), 5000);
+            }
+
+            launch(count) {
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => this.createBalloon(), i * 100);
+                }
+            }
+        }
+
+        class BirthdayApp {
+            constructor() {
+                this.inputSection = document.getElementById('input-section');
+                this.displaySection = document.getElementById('display-section');
+                this.nameInput = document.getElementById('nameInput');
+                this.greetingDisplay = document.getElementById('greeting');
+                this.messageDisplay = document.getElementById('message');
+                this.celebration = new Celebration();
+            }
+
+            startCelebration() {
+                const name = this.nameInput.value.trim();
+                
+                if (name === "") {
+                    alert("Masukkan nama dulu ya!");
+                    return;
+                }
+
+                // Inisialisasi Object Person
+                const celebrant = new Person(name);
+
+                // Update UI
+                this.inputSection.style.display = 'none';
+                this.displaySection.style.display = 'block';
+                this.greetingDisplay.innerText = celebrant.getGreeting();
+                this.messageDisplay.innerText = "Semoga panjang umur dan bahagia selalu!";
+
+                // Jalankan Efek
+                this.celebration.launch(30);
+            }
+        }
+
+        // Inisialisasi Aplikasi
+        const birthdayApp = new BirthdayApp();
+    </script>
+</body>
+</html>
