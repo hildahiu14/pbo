@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b6b; /* Merah ceria */
+            --secondary-color: #4ecdc4; /* Tosca muda */
+            --text-color: #333;
+            --light-text: #f0f0f0;
+            --background-gradient: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Mencegah scroll pada body utama */
+            color: var(--text-color);
+            background: var(--background-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Halaman Utama (Input Nama) */
+        #home-page, #message-page, #gallery-page {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #home-page {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white; /* Untuk teks di atas gambar latar */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            /* Pastikan gambar latar belakang terlihat */
+            background-image: url('https://via.placeholder.com/1920x1080/FF6B6B/FFFFFF?text=Background+Ultah'); /* Placeholder */
+        }
+        
+        /* Tambahkan CSS untuk gambar latar yang sebenarnya */
+        #home-page.with-image {
+            background-image: var(--bg-image-url, url('https://via.placeholder.com/1920x1080/FF6B6B/FFFFFF?text=Gambar+Ultah+Disini')); /* Default placeholder */
+        }
+
+        .home-content {
+            background: rgba(0,0,0,0.4); /* Overlay untuk readability */
+            padding: 30px 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            max-width: 90%;
+            backdrop-filter: blur(5px);
+        }
+
+        .home-content h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .home-content input[type="text"] {
+            padding: 12px 20px;
+            width: 70%;
+            max-width: 300px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            text-align: center;
+            background-color: rgba(255,255,255,0.9);
+            color: var(--text-color);
+        }
+
+        .home-content button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .home-content button:hover {
+            background-color: #e65a5a;
+            transform: translateY(-2px);
+        }
+
+        /* Halaman Pesan */
+        #message-page {
+            display: none; /* Sembunyikan secara default */
+            background: var(--background-gradient);
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            z-index: 2; /* Di atas balon */
+        }
+
+        .envelope-icon {
+            width: 100px;
+            height: 80px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            position: relative;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .envelope-icon:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .envelope-icon::before { /* Flap atas */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-top: 40px solid var(--secondary-color);
+            transform: translateY(-100%);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .envelope-icon::after { /* Lipatan V */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 50px solid var(--secondary-color);
+            border-right: 50px solid var(--secondary-color);
+            border-bottom: 40px solid transparent;
+        }
+        
+        .envelope-icon.open {
+            background-color: #e0e0e0; /* Warna beda saat terbuka */
+        }
+        .envelope-icon.open::before {
+            border-top-color: #e0e0e0;
+        }
+        .envelope-icon.open::after {
+            border-left-color: #e0e0e0;
+            border-right-color: #e0e0e0;
+        }
+
+
+        .message-content {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px; /* Tinggi maksimal */
+            overflow-y: auto; /* Bisa di-scroll */
+            text-align: left;
+            line-height: 1.6;
+            display: none; /* Sembunyikan secara default */
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+        .message-content.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .message-content h2 {
+            font-family: 'Pacifico', cursive;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .message-card .next-button {
+            margin-top: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .message-card .next-button:hover {
+            background-color: #e65a5a;
+        }
+
+        /* Halaman Galeri */
+        #gallery-page {
+            display: none; /* Sembunyikan secara default */
+            background: var(--background-gradient);
+            padding: 20px;
+        }
+
+        #gallery-page h1 {
+            font-family: 'Pacifico', cursive;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            width: 90%;
+            margin: auto;
+            overflow-y: auto;
+            max-height: calc(100vh - 150px); /* Sesuaikan tinggi agar bisa discroll */
+            padding-bottom: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: white;
+            transition: transform 0.2s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item p {
+            padding: 10px;
+            margin: 0;
+            font-size: 0.9em;
+            color: #555;
+            text-align: center;
+        }
+
+        .back-to-message {
+            margin-top: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-to-message:hover {
+            background-color: #3aa8a0;
+        }
+
+        /* Animasi Balon */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 70px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: floatUp 5s linear forwards;
+            z-index: 1; /* Di bawah konten utama */
+        }
+        .balloon::before { /* simpul balon */
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: inherit;
+            border-radius: 50%;
+        }
+        .balloon::after { /* tali balon */
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background-color: rgba(0,0,0,0.3);
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="home-page">
+        <div class="home-content">
+            <h1>Halo, Siapa yang Ultah?</h1>
+            <input type="text" id="nameInput" placeholder="Masukkan nama...">
+            <button onclick="birthdayApp.goToMessagePage()">Lanjutkan</button>
+        </div>
+    </div>
+
+    <div id="message-page">
+        <div class="message-card">
+            <h1 id="message-greeting" style="font-family: 'Pacifico', cursive; color: var(--primary-color);"></h1>
+            <div class="envelope-icon" onclick="birthdayApp.toggleMessage()"></div>
+            <div id="message-content" class="message-content">
+                <h2>Pesan Spesial untukmu!</h2>
+                <p id="full-message"></p>
+            </div>
+            <button class="next-button" onclick="birthdayApp.goToGalleryPage()">Lihat Foto-foto!</button>
+        </div>
+    </div>
+
+    <div id="gallery-page">
+        <h1 id="gallery-title"></h1>
+        <div class="gallery-grid" id="gallery-grid">
+            </div>
+        <button class="back-to-message" onclick="birthdayApp.goToMessagePage()">Kembali ke Pesan</button>
+    </div>
+
+    <script>
+        /**
+         * KONSEP OOP:
+         * 1. Class Person: Menyimpan data entitas yang berulang tahun.
+         * 2. Class UIHandler: Mengatur manipulasi DOM dan pergantian "halaman".
+         * 3. Class CelebrationEffects: Logika efek visual (balon).
+         * 4. Class DataService: Menangani data statis seperti gambar galeri atau pesan.
+         * 5. Class BirthdayApp: Kelas utama yang mengorkestrasi semua bagian.
+         */
+
+        class Person {
+            constructor(name) {
+                this.name = name;
+            }
+
+            getGreeting() {
+                return `Selamat Ulang Tahun, ${this.name}!`;
+            }
+
+            getPersonalizedMessage() {
+                return `
+                    Hai ${this.name} yang paling spesial!
+                    Di hari ulang tahunmu ini, semoga semua impianmu tercapai, kebahagiaan selalu menyertai setiap langkahmu, dan cinta kasih melingkupimu selalu. Terima kasih sudah menjadi sosok yang luar biasa.
+                    Semoga panjang umur, sehat selalu, dan semakin sukses di tahun-tahun mendatang!
+                    <br><br>
+                    Dengan sepenuh hati,<br>
+                    Sahabatmu
+                `;
+            }
+        }
+
+        class DataService {
+            static getCelebrantBackgroundImage() {
+                // Ganti URL ini dengan gambar orang yang berulang tahun!
+                // Pastikan URL gambar bisa diakses publik
+                return 'https://via.placeholder.com/1920x1080/FFDDC1/808080?text=Gambar+Orang+Ultah+Disini';
+            }
+
+            static getGalleryPhotos() {
+                return [
+                    { src: 'https://via.placeholder.com/300x200/FFC0CB/FFFFFF?text=Foto+1', caption: 'Momen Bahagia' },
+                    { src: 'https://via.placeholder.com/300x200/ADD8E6/FFFFFF?text=Foto+2', caption: 'Senyum Terbaik' },
+                    { src: 'https://via.placeholder.com/300x200/90EE90/FFFFFF?text=Foto+3', caption: 'Kenangan Indah' },
+                    { src: 'https://via.placeholder.com/300x200/FFB6C1/FFFFFF?text=Foto+4', caption: 'Bersama Teman' },
+                    { src: 'https://via.placeholder.com/300x200/DDA0DD/FFFFFF?text=Foto+5', caption: 'Petualangan Baru' },
+                    { src: 'https://via.placeholder.com/300x200/87CEFA/FFFFFF?text=Foto+6', caption: 'Canda Tawa' }
+                ];
+            }
+        }
+
+        class CelebrationEffects {
+            createBalloon() {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+
+                const colors = ['var(--primary-color)', 'var(--secondary-color)', '#ffe66d', '#1a535c', '#ff9f1c', '#a05195', '#d45087'];
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.animationDuration = (Math.random() * 4 + 3) + 's'; // 3-7 detik
+                balloon.style.animationDelay = (Math.random() * 0.5) + 's'; // Sedikit delay acak
+
+                document.body.appendChild(balloon);
+
+                setTimeout(() => balloon.remove(), parseFloat(balloon.style.animationDuration) * 1000 + 500); // Hapus setelah animasi + buffer
+            }
+
+            launchBalloons(count = 30) {
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => this.createBalloon(), i * 200); // Jeda 200ms antar balon
+                }
+            }
+        }
+
+        class UIHandler {
+            constructor() {
+                this.homePage = document.getElementById('home-page');
+                this.messagePage = document.getElementById('message-page');
+                this.galleryPage = document.getElementById('gallery-page');
+                this.nameInput = document.getElementById('nameInput');
+                this.messageGreeting = document.getElementById('message-greeting');
+                this.fullMessage = document.getElementById('full-message');
+                this.messageContentDiv = document.getElementById('message-content');
+                this.envelopeIcon = document.querySelector('.envelope-icon');
+                this.galleryGrid = document.getElementById('gallery-grid');
+                this.galleryTitle = document.getElementById('gallery-title');
+            }
+
+            // Metode untuk menampilkan/menyembunyikan halaman
+            showPage(pageId) {
+                this.homePage.style.display = 'none';
+                this.messagePage.style.display = 'none';
+                this.galleryPage.style.display = 'none';
+
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.style.display = 'flex';
+                    // Reset scroll for message content if re-showing
+                    if (pageId === 'message-page') {
+                        this.messageContentDiv.scrollTop = 0;
+                        this.messageContentDiv.classList.remove('show');
+                        this.envelopeIcon.classList.remove('open');
+                    }
+                }
+            }
+
+            updateMessagePage(person) {
+                this.messageGreeting.innerText = person.getGreeting();
+                this.fullMessage.innerHTML = person.getPersonalizedMessage();
+            }
+
+            toggleMessageContent() {
+                this.messageContentDiv.classList.toggle('show');
+                this.envelopeIcon.classList.toggle('open');
+            }
+
+            renderGallery(photos, celebrantName) {
+                this.galleryGrid.innerHTML = ''; // Bersihkan konten sebelumnya
+                this.galleryTitle.innerText = `Galeri Foto ${celebrantName || 'Ulang Tahun'}`;
+                photos.forEach(photo => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `
+                        <img src="${photo.src}" alt="${photo.caption}">
+                        <p>${photo.caption}</p>
+                    `;
+                    this.galleryGrid.appendChild(item);
+                });
+            }
+
+            setHomePageBackground(imageUrl) {
+                const homePage = document.getElementById('home-page');
+                homePage.style.setProperty('--bg-image-url', `url('${imageUrl}')`);
+                homePage.classList.add('with-image'); // Tambahkan kelas untuk menerapkan gambar latar
+            }
+        }
+
+        class BirthdayApp {
+            constructor() {
+                this.ui = new UIHandler();
+                this.effects = new CelebrationEffects();
+                this.person = null; // Akan diisi setelah input nama
+
+                // Set initial background for home page
+                this.ui.setHomePageBackground(DataService.getCelebrantBackgroundImage());
+            }
+
+            goToMessagePage() {
+                const name = this.ui.nameInput.value.trim();
+
+                if (name === "") {
+                    alert("Masukkan nama dulu ya!");
+                    return;
+                }
+
+                this.person = new Person(name); // Inisialisasi object Person
+                this.ui.updateMessagePage(this
